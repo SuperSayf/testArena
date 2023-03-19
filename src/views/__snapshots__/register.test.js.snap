@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly enzyme 1`] = `
+<div
+  className="register-container"
+>
+  <HelmetWrapper
+    defer={true}
+    encodeSpecialCharacters={true}
+  >
+    <title>
+      register - Project ARENA
+    </title>
+    <meta
+      content="register - Project ARENA"
+      property="og:title"
+    />
+  </HelmetWrapper>
+  <div
+    className="register-container1"
+  >
+    <Link
+      className="register-navlink"
+      to="/"
+    >
+      <svg
+        className="register-backbtn"
+        viewBox="0 0 877.7142857142857 1024"
+      >
+        <path
+          d="M519.429 797.143l58.286-58.286c14.286-14.286 14.286-37.143 0-51.429l-175.429-175.429 175.429-175.429c14.286-14.286 14.286-37.143 0-51.429l-58.286-58.286c-14.286-14.286-37.143-14.286-51.429 0l-259.429 259.429c-14.286 14.286-14.286 37.143 0 51.429l259.429 259.429c14.286 14.286 37.143 14.286 51.429 0zM877.714 512c0 242.286-196.571 438.857-438.857 438.857s-438.857-196.571-438.857-438.857 196.571-438.857 438.857-438.857 438.857 196.571 438.857 438.857z"
+        />
+      </svg>
+    </Link>
+  </div>
+  <div
+    className="register-container5"
+  >
+    <span
+      className="register-text"
+    >
+      <span>
+        Register
+      </span>
+      <br />
+    </span>
+    <BasicTextFields
+      buttonText="NAME"
+      onChange={[Function]}
+      rootClassName="input-box-for-info-root-class-name"
+    />
+    <BasicTextFields
+      buttonText="EMAIL"
+      onChange={[Function]}
+      rootClassName="input-box-for-info-root-class-name2"
+    />
+    <BasicTextFields
+      buttonText="USERNAME"
+      onChange={[Function]}
+      rootClassName="input-box-for-info-root-class-name3"
+    />
+    <BasicTextFields
+      buttonText="PASSWORD"
+      isPassword={true}
+      onChange={[Function]}
+      rootClassName="input-box-for-info-root-class-name4"
+    />
+    <br />
+    <ButtonIcons
+      data-testid="settingsPane"
+      name="Register"
+      onClick={[Function]}
+      rootClassName="button-root-class-name"
+    />
+    <br />
+    <span
+      className="register-text3"
+    >
+      Already have an account? 
+    </span>
+    <Link
+      className="register-navlink1 button"
+      to="/login"
+    >
+      Login here
+    </Link>
+  </div>
+</div>
+`;

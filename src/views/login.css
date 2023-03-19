@@ -1,0 +1,48 @@
+.login-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.login-container1 {
+  width: 100%;
+  height: 1000px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.login-container2 {
+  flex: 0 0 auto;
+  width: 100%;
+  height: 112px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--dl-radius-radius-round);
+  justify-content: flex-start;
+}
+.login-navlink {
+  display: contents;
+}
+.login-icon {
+  width: 125px;
+  height: 78px;
+  text-decoration: none;
+}
+.login-container3 {
+  width: 496px;
+  height: 1000px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.login-text {
+  font-size: 70px;
+  margin-top: 1px;
+  font-family: Bebas Neue;
+}
