@@ -50,24 +50,28 @@ exports[`renders correctly enzyme 1`] = `
       rootClassName="input-box-for-info-root-class-name"
     />
     <BasicTextFields
-      buttonText="EMAIL"
+      buttonText="SURNAME"
       onChange={[Function]}
       rootClassName="input-box-for-info-root-class-name2"
     />
     <BasicTextFields
-      buttonText="USERNAME"
+      buttonText="EMAIL"
       onChange={[Function]}
       rootClassName="input-box-for-info-root-class-name3"
+    />
+    <BasicTextFields
+      buttonText="USERNAME"
+      onChange={[Function]}
+      rootClassName="input-box-for-info-root-class-name4"
     />
     <BasicTextFields
       buttonText="PASSWORD"
       isPassword={true}
       onChange={[Function]}
-      rootClassName="input-box-for-info-root-class-name4"
+      rootClassName="input-box-for-info-root-class-name5"
     />
     <br />
     <ButtonIcons
-      data-testid="settingsPane"
       name="Register"
       onClick={[Function]}
       rootClassName="button-root-class-name"
@@ -76,7 +80,7 @@ exports[`renders correctly enzyme 1`] = `
     <span
       className="register-text3"
     >
-      Already have an account? 
+      Already have an account?
     </span>
     <Link
       className="register-navlink1 button"

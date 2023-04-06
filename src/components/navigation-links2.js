@@ -17,12 +17,12 @@ const NavigationLinks2 = (props) => {
 }
 
 NavigationLinks2.defaultProps = {
-  text: 'About',
-  text3: 'Team',
-  text1: 'Features',
-  text4: 'Blog',
   rootClassName: '',
-  text2: 'Pricing',
+  text: '',
+  text1: '',
+  text2: '',
+  text3: '',
+  text4: '',
 }
 
 NavigationLinks2.propTypes = {

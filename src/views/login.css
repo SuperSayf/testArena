@@ -41,8 +41,23 @@
   flex-direction: column;
   justify-content: flex-start;
 }
+.login-container4 {
+  flex: 0 0 auto;
+  width: auto;
+  border: 2px dashed rgba(120, 120, 120, 0.4);
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
 .login-text {
   font-size: 70px;
   margin-top: 1px;
   font-family: Bebas Neue;
+}
+.login-text1 {
+  font-size: 25px;
+  font-style: normal;
+  font-family: Bebas Neue;
+  font-weight: 400;
 }

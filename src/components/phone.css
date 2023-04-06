@@ -1,0 +1,40 @@
+.phone-container {
+    display: flex;
+    position: relative;
+    align-items: flex-start;
+  }
+  .phone-container1 {
+    flex: 0 0 auto;
+    width: 97px;
+    height: 100px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .phone-icon {
+    width: 57px;
+    height: 50%;
+    align-self: center;
+    margin-left: var(--dl-space-space-doubleunit);
+    margin-right: var(--dl-space-space-doubleunit);
+  }
+  .phone-container2 {
+    flex: 0 0 auto;
+    width: 276px;
+    height: 97px;
+    display: flex;
+    position: relative;
+    align-items: flex-start;
+  }
+  .phone-text {
+    top: 37px;
+    left: 53px;
+    position: absolute;
+    align-self: center;
+  }
+  .phone-root-class-name {
+    align-self: center;
+  }
+  .phone-root-class-name1 {
+    align-self: center;
+  }
+  

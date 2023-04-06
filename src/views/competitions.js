@@ -7,19 +7,42 @@ import "./competitions.css";
 
 function GenCards() {
   const [cardsData, setCardsData] = React.useState([]);
+  const [isFlipped, setIsFlipped] = React.useState(false);
 
   React.useEffect(() => {
-    axios.get("http://localhost:3002/api/get/competitions").then((response) => {
-      const data = response.data.map((data) => ({
-        title: data.competition_name,
-        views: data.competition_views,
-        image: data.competition_image,
-        description: data.competition_info,
-        endDate: data.competition_enddate,
-      }));
-      setCardsData(data);
-    });
+    axios
+      .get("http://localhost:3002/api/get/competitions")
+      .then((response) => {
+        const data = response.data.map((data) => ({
+          title: data.competition_name,
+          views: data.competition_views,
+          image: data.competition_image,
+          description: data.competition_info,
+          endDate: data.competition_enddate,
+        }));
+        setCardsData(data);
+      });
   }, []);
+
+  const handleCardClick = (index) => {
+    setIsFlipped(true);
+
+    if (isFlipped) {
+      axios
+        .post("http://localhost:3002/api/post/competition/incViews", {
+          competition_id: index + 1,
+        })
+        .then((response) => {
+          console.log(response);
+        });
+
+      const newCardsData = [...cardsData];
+      newCardsData[index].views += 1;
+      setCardsData(newCardsData);
+
+      setIsFlipped(false);
+    }
+  };
 
   return (
     <div
@@ -33,7 +56,13 @@ function GenCards() {
       }}
     >
       {cardsData.map((cardData, index) => (
-        <OverflowCard key={index} {...cardData} />
+        <OverflowCard
+          key={index}
+          onClick={() => {
+            handleCardClick(index);
+          }}
+          {...cardData}
+        />
       ))}
     </div>
   );
@@ -75,7 +104,7 @@ const Competitions = (props) => {
             </div>
           </div>
           <div className="competitions-right-side">
-            <Link to="/register" className="competitions-cta-btn button">
+            <Link to="/login" className="competitions-cta-btn button">
               PROJECT PORTAL
             </Link>
           </div>
@@ -96,7 +125,7 @@ const Competitions = (props) => {
               </div>
             </div>
             <div className="competitions-links-container1">
-            <Link to="/" className="home-link">
+              <Link to="/" className="home-link">
                 HOME
               </Link>
               <Link to="/competitions" className="home-link1 Anchor">

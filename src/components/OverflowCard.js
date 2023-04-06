@@ -4,24 +4,48 @@ import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
+import { borderRadius } from "@mui/system";
 
 export default function OverflowCard(props) {
-  const { image, title, description, views, endDate } = props;
+  const { image, title, description, views, endDate, onClick } = props;
   const [transform, setTransform] = React.useState("");
+  const [flipped, setFlipped] = React.useState(false);
 
   const handleMouseMove = (event) => {
     const card = event.currentTarget;
     const boundingRect = card.getBoundingClientRect();
     const offsetX = event.clientX - boundingRect.left - boundingRect.width / 2;
     const offsetY = event.clientY - boundingRect.top - boundingRect.height / 2;
-    const transform = `perspective(600px) rotateX(${
-      -offsetY / 10
-    }deg) rotateY(${offsetX / 10}deg)`;
+    const transform = `perspective(600px) rotateX(${-offsetY / 10
+      }deg) rotateY(${offsetX / 10}deg)`;
     setTransform(transform);
   };
 
   const handleMouseLeave = () => {
     setTransform("");
+  };
+
+  const handleClick = () => {
+    setFlipped(!flipped);
+    onClick();
+  };
+
+  const frontStyles = {
+    position: "relative",
+    overflow: "hidden",
+    backfaceVisibility: "hidden",
+    transition: "transform 0.6s",
+    transformStyle: "preserve-3d",
+    transform: flipped ? "rotateY(-180deg)" : "rotateY(0deg)",
+  };
+
+  const backStyles = {
+    position: "absolute",
+    overflow: "hidden",
+    backfaceVisibility: "hidden",
+    transition: "transform 0.6s",
+    transformStyle: "preserve-3d",
+    transform: flipped ? "rotateY(0deg)" : "rotateY(180deg)",
   };
 
   return (
@@ -30,49 +54,64 @@ export default function OverflowCard(props) {
       sx={{ width: 320 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ transform, transition: "transform 0.2s ease-out" }}
+      onClick={handleClick}
+      style={
+        {
+          transform,
+          transition: "transform 0.2s ease-out",
+          cursor: "pointer"
+        }
+      }
     >
-      <CardOverflow>
-        <AspectRatio ratio="2">
-          <img
-            src={image}
-            srcSet={`${image}?auto=format&fit=crop&w=318&dpr=2 2x`}
-            loading="lazy"
-            alt=""
-          />
-        </AspectRatio>
-      </CardOverflow>
-      <Typography level="h2" sx={{ fontSize: "md", mt: 2 }}>
-        {title}
-      </Typography>
-      <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
-        {description}
-      </Typography>
-      <Divider />
-      <CardOverflow
-        variant="soft"
-        sx={{
-          display: "flex",
-          gap: 1.5,
-          py: 1.5,
-          px: "var(--Card-padding)",
-          bgcolor: "background.level1",
-        }}
-      >
-        <Typography
-          level="body3"
-          sx={{ fontWeight: "md", color: "text.secondary" }}
-        >
-          {views} views
+      <div style={frontStyles}>
+        <CardOverflow>
+          <AspectRatio ratio="2">
+            <img
+              src={image}
+              srcSet={`${image}?auto=format&fit=crop&w=318&dpr=2 2x`}
+              loading="lazy"
+              alt=""
+            />
+          </AspectRatio>
+        </CardOverflow>
+        <Typography level="h2" sx={{ fontSize: "md", mt: 2 }}>
+          {title}
         </Typography>
-        <Divider orientation="vertical" />
-        <Typography
-          level="body3"
-          sx={{ fontWeight: "md", color: "text.secondary" }}
-        >
-          {endDate}
+        <Typography level="body2" sx={{ mt: 2, mb: 2 }}>
+          Click <b>here</b> to see details
         </Typography>
-      </CardOverflow>
+        <Divider />
+        <CardOverflow
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            py: 1.5,
+            px: "var(--Card-padding)"
+          }}
+        >
+          <Typography
+            level="body3"
+            sx={{ fontWeight: "md", color: "text.secondary" }}
+          >
+            {views} views
+          </Typography>
+          <Divider orientation="vertical" />
+          <Typography
+            level="body3"
+            sx={{ fontWeight: "md", color: "text.secondary" }}
+          >
+            {endDate}
+          </Typography>
+        </CardOverflow>
+      </div>
+      <div style={backStyles}>
+        <CardOverflow>
+          {/* Add the description */}
+          <Typography level="body2" sx={{ mt: 2, mb: 2 }}>
+            {description}
+          </Typography>
+        </CardOverflow>
+      </div>
     </Card>
   );
 }

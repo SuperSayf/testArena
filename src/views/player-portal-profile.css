@@ -1,0 +1,222 @@
+.player-portal-profile-container {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: column;
+  }
+  .player-portal-profile-navbar-container {
+    top: 0;
+    width: 100%;
+    display: flex;
+    z-index: 100;
+    position: sticky;
+    box-shadow: 5px 5px 10px 0px #b9b9b9;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--dl-color-gray-white);
+  }
+  .player-portal-profile-navbar {
+    width: 100%;
+    display: flex;
+    max-width: var(--dl-size-size-maxcontent);
+    align-items: center;
+    padding-top: var(--dl-space-space-doubleunit);
+    padding-left: var(--dl-space-space-tripleunit);
+    padding-right: var(--dl-space-space-tripleunit);
+    flex-direction: row;
+    padding-bottom: var(--dl-space-space-doubleunit);
+    justify-content: space-between;
+  }
+  .player-portal-profile-left-side {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .player-portal-profile-image {
+    width: 50px;
+    align-self: center;
+    object-fit: cover;
+    margin-right: var(--dl-space-space-doubleunit);
+  }
+  .player-portal-profile-burger-menu {
+    display: none;
+    align-items: flex-start;
+    border-radius: var(--dl-radius-radius-radius4);
+    flex-direction: column;
+  }
+  .player-portal-profile-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .player-portal-profile-links-container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+  }
+  .player-portal-profile-link {
+    font-style: normal;
+    font-weight: 700;
+    margin-right: var(--dl-space-space-tripleunit);
+    text-transform: capitalize;
+    text-decoration: none;
+  }
+  .player-portal-profile-link1 {
+    margin-right: var(--dl-space-space-tripleunit);
+    text-decoration: none;
+  }
+  .player-portal-profile-link2 {
+    margin-right: var(--dl-space-space-tripleunit);
+    text-decoration: none;
+  }
+  .player-portal-profile-link3 {
+    text-decoration: none;
+  }
+  .player-portal-profile-container1 {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: space-between;
+    flex-direction: column;
+  }
+  .player-portal-profile-navlink {
+    display: contents;
+  }
+  .player-portal-profile-icon2 {
+    fill: #000000;
+    width: 35px;
+    height: 35px;
+    align-self: center;
+    text-decoration: none;
+  }
+  .player-portal-profile-mobile-menu {
+    top: 0px;
+    flex: 0 0 auto;
+    left: 0px;
+    width: 100%;
+    height: 100VH;
+    display: none;
+    padding: var(--dl-space-space-doubleunit);
+    position: absolute;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: #fff;
+  }
+  .player-portal-profile-container2 {
+    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--dl-space-space-doubleunit);
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .player-portal-profile-image1 {
+    width: 50px;
+    align-self: center;
+    object-fit: cover;
+    margin-right: var(--dl-space-space-doubleunit);
+  }
+  .player-portal-profile-close-menu {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .player-portal-profile-icon4 {
+    width: 24px;
+    height: 24px;
+  }
+  .player-portal-profile-links-container1 {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .player-portal-profile-link4 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .player-portal-profile-link5 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .player-portal-profile-link6 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .player-portal-profile-link7 {
+    text-decoration: none;
+  }
+  .player-portal-profile-section-separator {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .player-portal-profile-section-separator1 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .player-portal-profile-section-separator2 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .player-portal-profile-section-separator3 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .player-portal-profile-container3 {
+    width: 496px;
+    height: 1000px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .player-portal-profile-text {
+    font-size: 70px;
+    margin-top: 100px;
+    font-family: Bebas Neue;
+  }
+  .player-portal-profile-container4 {
+    flex: 0 0 auto;
+    width: auto;
+    border: 2px dashed rgba(120, 120, 120, 0.4);
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  @media(max-width: 767px) {
+    .player-portal-profile-burger-menu {
+      display: flex;
+      padding: var(--dl-space-space-halfunit);
+      background-color: var(--dl-color-gray-black);
+    }
+    .player-portal-profile-icon {
+      fill: var(--dl-color-gray-white);
+    }
+    .player-portal-profile-links-container {
+      display: none;
+    }
+  }
+  

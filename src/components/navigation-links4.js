@@ -18,11 +18,11 @@ const NavigationLinks4 = (props) => {
 
 NavigationLinks4.defaultProps = {
   rootClassName: '',
-  text2: 'Pricing',
-  text: 'About',
-  text1: 'Features',
-  text3: 'Team',
-  text4: 'Blog',
+  text: '',
+  text1: '',
+  text2: '',
+  text3: '',
+  text4: '',
 }
 
 NavigationLinks4.propTypes = {
