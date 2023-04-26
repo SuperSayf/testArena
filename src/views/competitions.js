@@ -31,7 +31,7 @@ function GenCards() {
 
   const fetchCardData = () => {
     return axios
-      .get("https://arena-gamma.vercel.app:3002/api/get/competitions")
+      .get("http://localhost:3002/api/get/competitions")
       .then((response) => {
         //console.log(response.data);
         const data = response.data.map((data) => ({
@@ -107,7 +107,7 @@ function GenCards() {
 
   // React.useEffect(() => {
   //   axios
-  //     .get("https://arena-gamma.vercel.app/api/get/competitions")
+  //     .get("http://localhost:3002/api/get/competitions")
   //     .then((response) => {
   //       const data = response.data.map((data) => ({
   //         title: data.competition_name,
@@ -126,7 +126,7 @@ function GenCards() {
     if (isFlipped) {
       try {
         const response = axios.post(
-          "https://arena-gamma.vercel.app:3002/api/post/competition/incViews",
+          "http://localhost:3002/api/post/competition/incViews",
           { competition_id: competition_id }
         );
 
