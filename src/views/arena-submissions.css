@@ -1,0 +1,201 @@
+.arena-submissions-container {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: column;
+  }
+  .arena-submissions-navbar-container {
+    top: 0;
+    width: 100%;
+    display: flex;
+    z-index: 100;
+    position: sticky;
+    box-shadow: 5px 5px 10px 0px #b9b9b9;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--dl-color-gray-white);
+  }
+  .arena-submissions-navbar {
+    width: 100%;
+    display: flex;
+    max-width: var(--dl-size-size-maxcontent);
+    align-items: center;
+    padding-top: var(--dl-space-space-doubleunit);
+    padding-left: var(--dl-space-space-tripleunit);
+    padding-right: var(--dl-space-space-tripleunit);
+    flex-direction: row;
+    padding-bottom: var(--dl-space-space-doubleunit);
+    justify-content: space-between;
+  }
+  .arena-submissions-left-side {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .arena-submissions-image {
+    width: 50px;
+    align-self: center;
+    object-fit: cover;
+    margin-right: var(--dl-space-space-doubleunit);
+  }
+  .arena-submissions-burger-menu {
+    display: none;
+    align-items: flex-start;
+    border-radius: var(--dl-radius-radius-radius4);
+    flex-direction: column;
+  }
+  .arena-submissions-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .arena-submissions-icon2 {
+    width: 24px;
+    height: 24px;
+    margin-right: var(--dl-space-space-tripleunit);
+  }
+  .arena-submissions-links-container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+  }
+  .arena-submissions-link {
+    font-style: normal;
+    font-weight: 700;
+    margin-right: var(--dl-space-space-tripleunit);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .arena-submissions-link1 {
+    margin-right: var(--dl-space-space-tripleunit);
+    text-decoration: none;
+  }
+  .arena-submissions-link2 {
+    margin-right: var(--dl-space-space-tripleunit);
+    text-decoration: none;
+  }
+  .arena-submissions-container1 {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: space-between;
+    flex-direction: column;
+  }
+  .arena-submissions-navlink {
+    display: contents;
+  }
+  .arena-submissions-icon4 {
+    fill: #000000;
+    width: 35px;
+    height: 35px;
+    align-self: center;
+    text-decoration: none;
+  }
+  .arena-submissions-mobile-menu {
+    top: 0px;
+    flex: 0 0 auto;
+    left: 0px;
+    width: 100%;
+    height: 100VH;
+    display: none;
+    padding: var(--dl-space-space-doubleunit);
+    position: absolute;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: #fff;
+  }
+  .arena-submissions-container2 {
+    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--dl-space-space-doubleunit);
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .arena-submissions-image1 {
+    width: 50px;
+    align-self: center;
+    object-fit: cover;
+    margin-right: var(--dl-space-space-doubleunit);
+  }
+  .arena-submissions-close-menu {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .arena-submissions-icon6 {
+    width: 24px;
+    height: 24px;
+  }
+  .arena-submissions-links-container1 {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .arena-submissions-link3 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .arena-submissions-link4 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .arena-submissions-link5 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .arena-submissions-link6 {
+    text-decoration: none;
+  }
+  .arena-submissions-section-separator {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .arena-submissions-section-separator1 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .arena-submissions-section-separator2 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .arena-submissions-section-separator3 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  @media(max-width: 767px) {
+    .arena-submissions-burger-menu {
+      display: flex;
+      padding: var(--dl-space-space-halfunit);
+      background-color: var(--dl-color-gray-black);
+    }
+    .arena-submissions-icon {
+      fill: var(--dl-color-gray-white);
+    }
+    .arena-submissions-links-container {
+      display: none;
+    }
+  }
+  

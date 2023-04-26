@@ -1,11 +1,9 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import OverflowCard from "../components/OverflowCardPP";
-import Modal from 'react-modal';
-const userID = sessionStorage.getItem('userID');
-import './player-portal-competitions.css'
-import { useState } from 'react';
+const userID = sessionStorage.getItem("userID");
+import "./player-portal-competitions.css";
 
 function GenCards() {
   const [cardsData, setCardsData] = React.useState([]);
@@ -15,8 +13,9 @@ function GenCards() {
     return axios
       .get("http://localhost:3002/api/get/competitions")
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         const data = response.data.map((data) => ({
+          competition_id: data.competition_id,
           title: data.competition_name,
           views: data.competition_views,
           image: data.competition_image,
@@ -31,8 +30,10 @@ function GenCards() {
     return axios
       .get(`http://localhost:3002/api/get/competition/registered/${userID}`)
       .then((response) => {
-        console.log(response.data);
-        const registeredComps = response.data.map((data) => data.competition_id);
+        //console.log(response.data);
+        const registeredComps = response.data.map(
+          (data) => data.competition_id
+        );
         const newCardsData = [...cardsData];
         for (let i = 0; i < newCardsData.length; i++) {
           if (registeredComps.includes(i + 1)) {
@@ -46,44 +47,47 @@ function GenCards() {
   };
 
   React.useEffect(() => {
-    fetchCardData()
-      .then((data) => fetchRegisterData(userID, data))
-      .then((newCardsData) => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchCardData();
+        const newCardsData = await fetchRegisterData(userID, data);
         setCardsData(newCardsData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-
   //views of card
-  const handleCardClick = (index) => {
+  const handleCardClick = async (index) => {
     setIsFlipped(true);
 
     if (isFlipped) {
-      axios
-        .post("http://localhost:3002/api/post/competition/incViews", {
-          competition_id: index + 1,
-        })
-        .then((response) => {
-          console.log(response);
-        });
+      try {
+        const response = axios.post(
+          "http://localhost:3002/api/post/competition/incViews",
+          { competition_id: index + 1 }
+        );
 
-      const newCardsData = [...cardsData];
-      newCardsData[index].views += 1;
-      setCardsData(newCardsData);
-
-      setIsFlipped(false);
+        const newCardsData = [...cardsData];
+        newCardsData[index].views += 1;
+        setCardsData(newCardsData);
+        console.log(response);
+        setIsFlipped(false);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
-  //if card is clicked 
-  const handleButtonClick = (index) => {
-    console.log(`Button on card ${index} was clicked!`);
+  //if card is clicked
+  const handleButton1Click = (index) => {
+    // console.log(`Button on card ${index} was clicked!`);
     // Check if the card is registered or not
     if (cardsData[index].isRegistered) {
-      console.log(`User is already registered for card ${index}`);
+      // console.log(`User is already registered for card ${index}`);
       // Can use API route to leave competition
       axios
         .post("http://localhost:3002/api/post/leave/team", {
@@ -91,22 +95,25 @@ function GenCards() {
           user_id: userID,
         })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
         });
 
       const newCardsData = [...cardsData];
       newCardsData[index].isRegistered = false;
       setCardsData(newCardsData);
     } else {
-      console.log(`User is not registered for card ${index}`);
+      // console.log(`User is not registered for card ${index}`);
       axios
-        .get("http://localhost:3002/api/get/competitionIDGlobal/" + cardsData[index].title)
+        .get(
+          "http://localhost:3002/api/get/competitionIDGlobal/" +
+            cardsData[index].title
+        )
         .then(function (response) {
-          console.log(response.data[0].competition_id);
+          // console.log(response.data[0].competition_id);
           const compID = response.data[0].competition_id;
-          sessionStorage.setItem('CompID', compID);
+          sessionStorage.setItem("CompID", compID);
           setTimeout(function () {
-            window.location.href = 'http://localhost:3000/player-portal-team';
+            window.location.href = "http://localhost:3000/player-portal-team";
           }, 1000);
         });
 
@@ -117,8 +124,27 @@ function GenCards() {
     // Add your functionality for the button click here
   };
 
+  // Handles "Enter Arena" button click
+  const handleButton2Click = (index) => {
+    axios
+      .get(
+        "http://localhost:3002/api/get/competitionIDGlobal/" +
+          cardsData[index].title
+      )
+      .then(function (response) {
+        // console.log(response.data[0].competition_id);
+        const compID = response.data[0].competition_id;
+        sessionStorage.setItem("CompID", compID);
+        setTimeout(function () {
+          window.location.href = "http://localhost:3000/arena-main";
+        }, 1000);
+      });
+    // console.log(`Enter Arena clicked for card ${index}`);
+  };
+
   return (
     <div
+      data-testid="card"
       style={{
         display: "flex",
         flexWrap: "wrap",
@@ -134,8 +160,11 @@ function GenCards() {
           onClick={() => {
             handleCardClick(index);
           }}
-          onButtonClick={() => {
-            handleButtonClick(index);
+          onButton1Click={() => {
+            handleButton1Click(index);
+          }}
+          onButton2Click={() => {
+            handleButton2Click(index);
           }}
           isRegistered={cardData.isRegistered}
           {...cardData}
@@ -146,7 +175,6 @@ function GenCards() {
 }
 
 const PlayerPortalCompetitions = (props) => {
-
   return (
     <div className="player-portal-competitions-container">
       <div
@@ -172,22 +200,31 @@ const PlayerPortalCompetitions = (props) => {
               </svg>
             </div>
             <div className="player-portal-competitions-links-container">
-              <Link to="/player-portal-home" className="player-portal-competitions-link">
+              <Link
+                to="/player-portal-home"
+                className="player-portal-competitions-link"
+              >
                 HOME
               </Link>
-              <Link to="/player-portal-competitions" className="player-portal-competitions-link1 Anchor">
+              <Link
+                to="/player-portal-competitions"
+                className="player-portal-competitions-link1 Anchor"
+              >
                 COMPETITIONS
               </Link>
-              <Link to="/player-portal-team" className="player-portal-competitions-link2 Anchor">
-                TEAM
-              </Link>
-              <Link to="/player-portal-contact" className="player-portal-competitions-link3 Anchor">
+              <Link
+                to="/player-portal-contact"
+                className="player-portal-competitions-link3 Anchor"
+              >
                 CONTACT US
               </Link>
             </div>
           </div>
           <div className="player-portal-competitions-container1">
-            <Link to="/player-portal-profile" className="player-portal-competitions-navlink">
+            <Link
+              to="/player-portal-profile"
+              className="player-portal-competitions-navlink"
+            >
               <svg
                 viewBox="0 0 1024 1024"
                 className="player-portal-competitions-icon2"
@@ -219,16 +256,28 @@ const PlayerPortalCompetitions = (props) => {
               </div>
             </div>
             <div className="player-portal-competitions-links-container1">
-              <Link to="/player-portal-home" className="player-portal-competitions-link">
+              <Link
+                to="/player-portal-home"
+                className="player-portal-competitions-link"
+              >
                 HOME
               </Link>
-              <Link to="/player-portal-competitions" className="player-portal-competitions-link1 Anchor">
+              <Link
+                to="/player-portal-competitions"
+                className="player-portal-competitions-link1 Anchor"
+              >
                 COMPETITIONS
               </Link>
-              <Link to="/player-portal-team" className="player-portal-competitions-link2 Anchor">
+              <Link
+                to="/player-portal-team"
+                className="player-portal-competitions-link2 Anchor"
+              >
                 TEAM
               </Link>
-              <Link to="/player-portal-contact" className="player-portal-competitions-link3 Anchor">
+              <Link
+                to="/player-portal-contact"
+                className="player-portal-competitions-link3 Anchor"
+              >
                 CONTACT US
               </Link>
             </div>
@@ -239,8 +288,8 @@ const PlayerPortalCompetitions = (props) => {
       <br />
       <GenCards />
       <br />
-    </div >
-  )
-}
+    </div>
+  );
+};
 
-export default PlayerPortalCompetitions
+export default PlayerPortalCompetitions;

@@ -73,6 +73,7 @@
     text-decoration: none;
   }
   .about-link3 {
+    margin-right: var(--dl-space-space-tripleunit);
     text-decoration: none;
   }
   .about-right-side {

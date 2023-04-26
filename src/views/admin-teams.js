@@ -9,16 +9,15 @@ function GenGrid() {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:3002/api/get/teams")
+      .get("http://localhost:3002/api/get/admin_teams")
       .then((response) => {
         const data = response.data.map((data, index) => ({
           id: index + 1,
           team_code: data.team_code,
           user_id: data.user_id,
-          team_captain: data.team_captain,
           team_name: data.team_name,
           team_score: data.team_score,
-          competition_id: data.competition_id,
+          competition_name: data.competition_name,
         }));
         setData(data);
       });
@@ -99,4 +98,4 @@ const AdminTeams = (props) => {
   )
 }
 
-export default AdminTeams
+export {AdminTeams}

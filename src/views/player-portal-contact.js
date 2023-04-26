@@ -35,9 +35,6 @@ const PlayerPortalContact = (props) => {
               <Link to="/player-portal-competitions"className="player-portal-contact-link1 Anchor" >
                 COMPETITIONS
               </Link>
-              <Link to="/player-portal-team" className="player-portal-contact-link2 Anchor" >
-                TEAM
-              </Link>
               <Link to="/player-portal-contact" className="player-portal-contact-link3">
                 <span className="Anchor">CONTACT US</span>
                 <br></br>

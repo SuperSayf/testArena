@@ -38,9 +38,9 @@ const Home = (props) => {
               <Link to="/about" className="contact-link3 Anchor">
                 ABOUT
               </Link>
-              <Link to="/admin-home" className="contact-link3 Anchor">
+              {/* <Link to="/admin-home" className="contact-link3 Anchor">
                 ADMIN
-              </Link>
+              </Link> */}
             </div>
           </div>
           <div className="home-right-side">

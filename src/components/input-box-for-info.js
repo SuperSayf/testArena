@@ -18,6 +18,7 @@ export default function BasicTextFields(props) {
         id="outlined-basic"
         label={buttonText}
         variant="outlined"
+        data-testid="input"
         inputProps={{
           onChange: onChange,
         }}

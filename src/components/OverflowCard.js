@@ -16,8 +16,9 @@ export default function OverflowCard(props) {
     const boundingRect = card.getBoundingClientRect();
     const offsetX = event.clientX - boundingRect.left - boundingRect.width / 2;
     const offsetY = event.clientY - boundingRect.top - boundingRect.height / 2;
-    const transform = `perspective(600px) rotateX(${-offsetY / 10
-      }deg) rotateY(${offsetX / 10}deg)`;
+    const transform = `perspective(600px) rotateX(${
+      -offsetY / 10
+    }deg) rotateY(${offsetX / 10}deg)`;
     setTransform(transform);
   };
 
@@ -46,6 +47,13 @@ export default function OverflowCard(props) {
     transition: "transform 0.6s",
     transformStyle: "preserve-3d",
     transform: flipped ? "rotateY(0deg)" : "rotateY(180deg)",
+
+    // make it centered
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    margin: "auto",
   };
 
   return (
@@ -55,13 +63,12 @@ export default function OverflowCard(props) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
-      style={
-        {
-          transform,
-          transition: "transform 0.2s ease-out",
-          cursor: "pointer"
-        }
-      }
+      style={{
+        transform,
+        transition: "transform 0.2s ease-out",
+        cursor: "pointer",
+      }}
+      data-testid="overflow-card"
     >
       <div style={frontStyles}>
         <CardOverflow>
@@ -86,7 +93,7 @@ export default function OverflowCard(props) {
             display: "flex",
             gap: 1.5,
             py: 1.5,
-            px: "var(--Card-padding)"
+            px: "var(--Card-padding)",
           }}
         >
           <Typography
@@ -105,7 +112,7 @@ export default function OverflowCard(props) {
         </CardOverflow>
       </div>
       <div style={backStyles}>
-        <CardOverflow>
+        <CardOverflow sx={{ textAlign: "center" }}>
           {/* Add the description */}
           <Typography level="body2" sx={{ mt: 2, mb: 2 }}>
             {description}

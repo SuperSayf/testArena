@@ -1,0 +1,222 @@
+.arena-profile-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+  }
+  .arena-profile-navbar-container {
+    top: 0;
+    width: 100%;
+    display: flex;
+    z-index: 100;
+    position: sticky;
+    box-shadow: 5px 5px 10px 0px #b9b9b9;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--dl-color-gray-white);
+  }
+  .arena-profile-navbar {
+    width: 100%;
+    display: flex;
+    max-width: var(--dl-size-size-maxcontent);
+    align-items: center;
+    padding-top: var(--dl-space-space-doubleunit);
+    padding-left: var(--dl-space-space-tripleunit);
+    padding-right: var(--dl-space-space-tripleunit);
+    flex-direction: row;
+    padding-bottom: var(--dl-space-space-doubleunit);
+    justify-content: space-between;
+  }
+  .arena-profile-left-side {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .arena-profile-image {
+    width: 50px;
+    align-self: center;
+    object-fit: cover;
+    margin-right: var(--dl-space-space-doubleunit);
+  }
+  .arena-profile-burger-menu {
+    display: none;
+    align-items: flex-start;
+    border-radius: var(--dl-radius-radius-radius4);
+    flex-direction: column;
+  }
+  .arena-profile-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .arena-profile-links-container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+  }
+  .arena-profile-link {
+    font-style: normal;
+    font-weight: 700;
+    margin-right: var(--dl-space-space-tripleunit);
+    text-transform: capitalize;
+    text-decoration: none;
+  }
+  .arena-profile-link1 {
+    margin-right: var(--dl-space-space-tripleunit);
+    text-decoration: none;
+  }
+  .arena-profile-link2 {
+    margin-right: var(--dl-space-space-tripleunit);
+    text-decoration: none;
+  }
+  .arena-profile-link3 {
+    text-decoration: none;
+  }
+  .arena-profile-container1 {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: space-between;
+    flex-direction: column;
+  }
+  .arena-profile-navlink {
+    display: contents;
+  }
+  .arena-profile-icon2 {
+    fill: #000000;
+    width: 35px;
+    height: 35px;
+    align-self: center;
+    text-decoration: none;
+  }
+  .arena-profile-mobile-menu {
+    top: 0px;
+    flex: 0 0 auto;
+    left: 0px;
+    width: 100%;
+    height: 100VH;
+    display: none;
+    padding: var(--dl-space-space-doubleunit);
+    position: absolute;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: #fff;
+  }
+  .arena-profile-container2 {
+    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--dl-space-space-doubleunit);
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .arena-profile-image1 {
+    width: 50px;
+    align-self: center;
+    object-fit: cover;
+    margin-right: var(--dl-space-space-doubleunit);
+  }
+  .arena-profile-close-menu {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .arena-profile-icon4 {
+    width: 24px;
+    height: 24px;
+  }
+  .arena-profile-links-container1 {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .arena-profile-link4 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .arena-profile-link5 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .arena-profile-link6 {
+    margin-bottom: var(--dl-space-space-unit);
+    text-decoration: none;
+  }
+  .arena-profile-link7 {
+    text-decoration: none;
+  }
+  .arena-profile-section-separator {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .arena-profile-section-separator1 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .arena-profile-section-separator2 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .arena-profile-section-separator3 {
+    width: 100%;
+    height: 1px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: var(--dl-color-gray-900);
+  }
+  .arena-profile-container3 {
+    width: 496px;
+    height: 1000px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .arena-profile-text {
+    font-size: 70px;
+    margin-top: 100px;
+    font-family: Bebas Neue;
+  }
+  .arena-profile-container4 {
+    flex: 0 0 auto;
+    width: auto;
+    border: 2px dashed rgba(120, 120, 120, 0.4);
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  @media(max-width: 767px) {
+    .arena-profile-burger-menu {
+      display: flex;
+      padding: var(--dl-space-space-halfunit);
+      background-color: var(--dl-color-gray-black);
+    }
+    .arena-profile-icon {
+      fill: var(--dl-color-gray-white);
+    }
+    .arena-profile-links-container {
+      display: none;
+    }
+  }
+  

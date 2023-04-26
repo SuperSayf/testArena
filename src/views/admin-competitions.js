@@ -1,90 +1,109 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import DataGrid from "../components/datagrid";
-import './admin-competitions.css'
-import Button from '../components/button'
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
-import Modal from 'react-modal';
-import { useState } from 'react';
+import "./admin-competitions.css";
+import Button from "../components/button";
+import "reactjs-popup/dist/index.css";
+import Modal from "react-modal";
+import { useState } from "react";
 import InputBoxForInfo from "../components/input-box-for-info";
-import { DateRangePicker } from 'react-date-range';
-import { PickerOverlay } from 'filestack-react';
 
-// const model =()=>{
-//   return(
-//     <div>
+import { PickerOverlay } from "filestack-react";
+import {
+  CalenderComp,
+  startDate,
+  endDate,
+} from "../components/CalenderComp.js";
 
-//     </div>
-//   )
-// }
-
-function CompetitionModal() {
-  const [visible, setVisible] = useState(false);
-  const [compname, setCompname] = useState('');
-  const [picture, setPicture] = useState(null);
-
-
+// Modal.setAppElement(el)
+function PostCompDetails(
+  compname,
+  pic,
+  startDate,
+  endDate,
+  desc,
+  pdf,
+  testcaseNum
+) {
+  console.log(compname, pic, startDate, endDate, desc, pdf, testcaseNum);
+  return axios.post("http://localhost:3002/api/post/Create_comp", {
+    compname: compname,
+    pic: pic,
+    startDate: startDate,
+    endDate: endDate,
+    desc: desc,
+    pdf: pdf,
+    testcaseNum: testcaseNum,
+  });
 }
-
-
 
 function GenGrid() {
   const [rows, setData] = React.useState([]);
 
   React.useEffect(() => {
-    axios
-      .get("http://localhost:3002/api/get/competitions")
-      .then((response) => {
-        const data = response.data.map((data, index) => ({
-          id: index + 1,
-          competition_id: data.competition_id,
-          competition_name: data.competition_name,
-          competition_views: data.competition_views,
-          competition_image: data.competition_image,
-          competition_leaderboard: data.competition_leaderboard,
-          competition_startdate: data.competition_startdate,
-          competition_enddate: data.competition_enddate,
-          competition_info: data.competition_info,
-          competition_testcases: data.competition_testcases,
-        }));
-        setData(data);
-      });
+    axios.get("http://localhost:3002/api/get/competitions").then((response) => {
+      const data = response.data.map((data, index) => ({
+        id: index + 1,
+        competition_id: data.competition_id,
+        competition_name: data.competition_name,
+        competition_views: data.competition_views,
+        competition_image: data.competition_image,
+        competition_startdate: data.competition_startdate,
+        competition_enddate: data.competition_enddate,
+        competition_info: data.competition_info,
+        competition_testcases: data.competition_testcases,
+      }));
+      setData(data);
+    });
   }, []);
 
   const columns = [
-    { field: 'competition_id', headerName: 'ID', width: 150 },
-    { field: 'competition_name', headerName: 'Title', width: 150 },
-    { field: 'competition_views', headerName: 'Views', width: 150 },
-    { field: 'competition_image', headerName: 'Image', width: 150 },
-    { field: 'competition_leaderboard', headerName: 'Leaderboard', width: 150 },
-    { field: 'competition_startdate', headerName: 'Start Date', width: 150 },
-    { field: 'competition_enddate', headerName: 'End Date', width: 150 },
-    { field: 'competition_info', headerName: 'Info', width: 150 },
-    { field: 'competition_testcases', headerName: 'Test Cases', width: 150 },
+    { field: "competition_id", headerName: "ID", width: 150 },
+    { field: "competition_name", headerName: "Title", width: 150 },
+    { field: "competition_views", headerName: "Views", width: 150 },
+    { field: "competition_image", headerName: "Image", width: 150 },
+    { field: "competition_startdate", headerName: "Start Date", width: 150 },
+    { field: "competition_enddate", headerName: "End Date", width: 150 },
+    { field: "competition_info", headerName: "Info", width: 150 },
+    { field: "competition_testcases", headerName: "Test Cases", width: 150 },
   ];
 
-  return <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+  return (
+    <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+  );
 }
 
 const AdminCompetitions = (props) => {
   const [compname, setCompname] = useState("");
-  const [picture, setPicture] = useState('');
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: null,
-      key: 'selection'
-    }
-  ]);
+  const [numtestcases, setNumTestCases] = useState(0);
+  const [desc, setdesc] = useState("");
+  const [pic, setpic] = useState("");
+  const [pdf, setpdf] = useState("");
 
-  const [visible, setvisible] = useState(false)
-
+  const [visible, setvisible] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
 
   const handleUploadDone = (res) => {
-    console.log(res.filesUploaded[0].url);
+    // setpic(res.filesUploaded[0].url)
+    // setpdf(res.filesUploaded[0].mimetype)
+    // console.log(pic);
+    // console.log(pdf);
+
+    if (
+      res.filesUploaded[0].mimetype === "image/png" ||
+      res.filesUploaded[0].mimetype === "image/jpeg" ||
+      res.filesUploaded[0].mimetype === "image/jpg"
+    ) {
+      // console.log("Image uploaded");
+      // console.log(res.filesUploaded[0].url);
+      setpic(res.filesUploaded[0].url);
+    }
+
+    if (res.filesUploaded[0].mimetype === "application/pdf") {
+      // console.log("PDF uploaded");
+      setpdf(res.filesUploaded[0].url);
+    }
   };
 
   const handleClosePicker = () => {
@@ -92,31 +111,68 @@ const AdminCompetitions = (props) => {
   };
 
   return (
-
     <div className="admin-competitions-container">
-      <div className="admin-competitions-button-container">
-        <div className="custom-modal">
-          <Modal isOpen={visible} style={{ content: { width: '70%', height: '70%', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }, overlay: { zIndex: 1000 } }} >
+      <Modal
+        isOpen={visible}
+        style={{
+          content: {
+            width: "80%",
+            height: "80%",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          },
+          overlay: { zIndex: 1000 },
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "100%",
+          }}
+        >
+          <h1>Create a Competition</h1>
 
-            <h1>Create a Competition</h1>
+          <InputBoxForInfo
+            buttonText="Competition Name"
+            onChange={(e) => setCompname(e.target.value)}
+          />
 
-            <InputBoxForInfo
-              buttonText="Competition Name"
-              onChange={(e) => setCompname(e.target.value)}
-            />
+          <InputBoxForInfo
+            buttonText="Number of test cases"
+            onChange={(e) => setNumTestCases(e.target.value)}
+          />
 
-            <InputBoxForInfo
-              buttonText=""
-              onChange={(e) => setPicture(e.target.value)}
-            />
-
-            <Button name="Upload Picture"
+          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
+            <Button
+              name="Upload PDF"
+              style={{ background: "#457B9D", color: "white" }}
               onClick={() => {
                 setPickerVisible(true);
-                console.log("Picker clicked");
+                // console.log("Picker clicked");
               }}
             />
-            {pickerVisible && (
+          </div>
+
+          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
+            <Button
+              name="Upload Competition Picture"
+              style={{ background: "#457B9D", color: "white" }}
+              onClick={() => {
+                setPickerVisible(true);
+                // console.log("Picker clicked");
+              }}
+            />
+          </div>
+
+          {pickerVisible && (
+            <div
+              className="center"
+              style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}
+            >
               <PickerOverlay
                 key="picker-overlay"
                 apikey={process.env.REACT_APP_API_KEY_FILESTACK}
@@ -126,40 +182,64 @@ const AdminCompetitions = (props) => {
                 pickerOptions={{
                   onClose: () => {
                     handleClosePicker();
-                  }
+                  },
                 }}
-              />
-            )}
-
-            {/* <InputBoxForInfo
-                 buttonText="YYYY/MM/DD Start date" 
-                 onChange={(e) => setstart(e.target.value)} 
-                />
-                */}
-
-            <div className="admin-competitions-button-container">
-              <Button
-                name="Close"
-                onClick={() => {
-                  setvisible(false)
-                  setPickerVisible(false);
-                  console.log("button clicked");
-                }}
-              // rootClassName="button-root-class-name2"
               />
             </div>
-          </Modal>
+          )}
+
+          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
+            <CalenderComp></CalenderComp>
+          </div>
+
+          <div>
+            <InputBoxForInfo
+              style={{ width: 400, height: 400 }}
+              buttonText="Competition Description"
+              onChange={(e) => setdesc(e.target.value)}
+            />
+          </div>
+
+          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
+            <Button
+              name="Create"
+              onClick={() => {
+                setvisible(false);
+                setPickerVisible(false);
+                // console.log("Create button clicked");
+                // console.log("Competition Name is:" + compname);
+                // console.log("Test cases are:" + numtestcases);
+                // console.log("startDate: " + startDate);
+                // console.log("endDate: " + endDate);
+                // console.log("Desc: " + desc);
+                // console.log("pic link is:" + pic);
+                // console.log("pdf link is:" + pdf);
+                PostCompDetails(
+                  compname,
+                  pic,
+                  startDate,
+                  endDate,
+                  desc,
+                  pdf,
+                  parseInt(numtestcases)
+                );
+                window.location.reload(false);
+              }}
+            />
+          </div>
+
+          <div style={{ marginLeft: 6, marginTop: 5 }}>
+            <Button
+              name="Close"
+              onClick={() => {
+                setvisible(false);
+                setPickerVisible(false);
+                // console.log("button clicked");
+              }}
+            />
+          </div>
         </div>
-
-        <Button name="Create Competition"
-          onClick={() => {
-            setvisible(true)
-            console.log("button clicked");
-          }}
-        // rootClassName="button-root-class-name2"
-        />
-
-      </div>
+      </Modal>
       <div data-role="Header" className="admin-competitions-navbar-container">
         <div className="admin-competitions-navbar">
           <div className="admin-competitions-left-side">
@@ -180,10 +260,16 @@ const AdminCompetitions = (props) => {
               <Link to="/admin-home" className="admin-competitions-link">
                 HOME
               </Link>
-              <Link to="/admin-competitions" className="admin-competitions-link1 Anchor">
+              <Link
+                to="/admin-competitions"
+                className="admin-competitions-link1 Anchor"
+              >
                 COMPETITIONS
               </Link>
-              <Link to="/admin-teams" className="admin-competitions-link2 Anchor">
+              <Link
+                to="/admin-teams"
+                className="admin-competitions-link2 Anchor"
+              >
                 TEAMS
               </Link>
             </div>
@@ -221,10 +307,16 @@ const AdminCompetitions = (props) => {
               <Link to="/admin-home" className="admin-competitions-link">
                 HOME
               </Link>
-              <Link to="/admin-competitions" className="admin-competitions-link1 Anchor">
+              <Link
+                to="/admin-competitions"
+                className="admin-competitions-link1 Anchor"
+              >
                 COMPETITIONS
               </Link>
-              <Link to="/admin-teams" className="admin-competitions-link2 Anchor">
+              <Link
+                to="/admin-teams"
+                className="admin-competitions-link2 Anchor"
+              >
                 TEAMS
               </Link>
             </div>
@@ -236,8 +328,15 @@ const AdminCompetitions = (props) => {
         <GenGrid />
       </div>
 
+      <Button
+        name="Create Competition"
+        onClick={() => {
+          setvisible(true);
+          // console.log("button clicked");
+        }}
+        // rootClassName="button-root-class-name2"
+      />
     </div>
-
-  )
-}
-export default AdminCompetitions
+  );
+};
+export default AdminCompetitions;

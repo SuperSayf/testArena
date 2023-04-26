@@ -29,6 +29,7 @@
     "path-browserify": "^1.0.1",
     "react": "^17.0.2",
     "react-alert": "^7.0.3",
+    "react-cool-form": "^0.4.1",
     "react-date-range": "^1.4.0",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
@@ -36,7 +37,10 @@
     "react-model": "^4.2.1",
     "react-router-dom": "^5.2.0",
     "reactjs-popup": "^2.0.5",
+    "remix-validated-form": "^4.6.11",
+    "sass": "^1.62.0",
     "styled-components": "^5.3.9",
+    "sweetalert2": "^11.7.3",
     "typewriter-effect": "^2.19.0",
     "uuidv4": "^6.2.13"
   },

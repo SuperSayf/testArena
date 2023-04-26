@@ -1,0 +1,75 @@
+.team-manager-container {
+    width: 100%;
+    height: 486px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .team-manager-container1 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--dl-space-space-halfunit);
+    flex-direction: row;
+    justify-content: center;
+  }
+  .team-manager-text {
+    color: var(--dl-color-gray-500);
+    align-self: center;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .team-manager-text1 {
+    align-self: center;
+    margin-bottom: var(--dl-space-space-unit);
+  }
+  .team-manager-text2 {
+    color: var(--dl-color-gray-500);
+    align-self: center;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .team-manager-text3 {
+    color: var(--dl-color-gray-500);
+    align-self: center;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .team-manager-text4 {
+    color: var(--dl-color-gray-500);
+    align-self: center;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .team-manager-text5 {
+    color: var(--dl-color-gray-500);
+    align-self: center;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: var(--dl-space-space-tripleunit);
+    text-transform: uppercase;
+  }
+  .team-manager-location {
+    color: var(--dl-color-gray-500);
+    align-self: center;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: var(--dl-space-space-unit);
+    text-transform: uppercase;
+  }
+  .team-manager-location-button{
+    align-self: center;
+    margin-top: var(--dl-space-space-fiveunits);
+  }
+
+  .button-icons{
+    align-self: center;
+    margin-top: var(--dl-space-space-fiveunits);
+    margin-bottom: var(--dl-space-space-fiveunits);
+  }

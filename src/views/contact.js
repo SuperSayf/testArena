@@ -52,13 +52,13 @@ const Contact = (props) => {
     }
     else{
       if (isValidEmail(email)) {
-        console.log('The email is valid');
+        // console.log('The email is valid');
         axios.post("http://localhost:3002/api/send/email", { name: name, subject: subject, email: email, message: message })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
       } else {
         setEmailError('Email is invalid');
@@ -71,13 +71,13 @@ const Contact = (props) => {
     //alert("Submitted")
     // Reset the text fields
     setName("");
-    console.log(name);
+    // console.log(name);
     setSubject("");
-    console.log(subject);
+    // console.log(subject);
     setEmail("");
-    console.log(email);
+    // console.log(email);
     setMessage("");
-    console.log(message);
+    // console.log(message);
     setSubmitCount(submitCount + 1);
     //console.log("Submitted");
   };

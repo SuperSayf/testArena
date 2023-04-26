@@ -19,6 +19,12 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
 
+  // Enter key triggers Login button
+  const handleSubmit = event => {
+    event.preventDefault();
+    handleLogin();
+  };
+
   const doAPIStuff = () => {
     axios
       .get("http://localhost:3002/api/get/password/" + username)
@@ -41,20 +47,20 @@ const Login = (props) => {
     axios
       .get("http://localhost:3002/api/get/isAdmin/" + username)
       .then(function (response) {
-        console.log((response.data)[0].user_admin);
+        // console.log((response.data)[0].user_admin);
         if ((response.data)[0].user_admin == "1") {
           setErrorMessage('Login Successful');
           setTimeout(function () {
             window.location.href = 'http://localhost:3000/admin-home';
-          }, 1000);
+          }, 500);
           //take him to the admin page
         }
         else {
-          console.log("this guy is a normal user");
+          // console.log("this guy is a normal user");
           setErrorMessage('Login Successful');
           setTimeout(function () {
             window.location.href = 'http://localhost:3000/player-portal-home';
-          }, 1000);
+          }, 500);
           //take him to the normal page
         }
 
@@ -66,23 +72,23 @@ const Login = (props) => {
       if (isMatch) {
         // Store the username in local storage
         sessionStorage.setItem('username', username);
-        console.log("The passwords match");
+        // console.log("The passwords match");
         setErrorMessage('');
         checkIfAdmin();
       }
       else {
         //alert("Incorrect Password");
         setErrorMessage('Incorrect username or password');
-        console.log("Incorrect Password");
+        // console.log("Incorrect Password");
       }
 
     });
   }
 
 const handleLogin = () =>{
-  console.log(
-    `Username: ${username}, Password: ${password}`
-  );
+  // console.log(
+  //   `Username: ${username}, Password: ${password}`
+  // );
   sessionStorage.setItem('username', username);
   axios
   .get("http://localhost:3002/api/get/userID/" + username)
@@ -114,7 +120,7 @@ const handleLogin = () =>{
             </svg>
           </Link>
         </div>
-        <div className="login-container3">
+        <div className="login-container3" onSubmit={handleSubmit}>
           <span className="login-text">LOGIN</span>
           <br></br>
           
@@ -130,9 +136,10 @@ const handleLogin = () =>{
           <br></br>
           {errorMessage && <div className="error">{errorMessage}</div>}
           <Button
+            type = "submit"
             name="Login"
             onClick={() => {
-              console.log("Login button clicked");
+              // console.log("Login button clicked");
               handleLogin();
             }}
             rootClassName="button-root-class-name2"
@@ -149,4 +156,4 @@ const handleLogin = () =>{
   );
 };
 
-export default Login;
+export { Login };

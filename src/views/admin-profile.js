@@ -1,108 +1,142 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import bycrypt from 'bcryptjs';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import bycrypt from "bcryptjs";
+import axios from "axios";
 
 import InputBoxForInfo from "../components/input-box-for-info";
 import Button from "../components/button";
-import './admin-profile.css'
+import "./admin-profile.css";
+
+// Update user details in database
+function putUserDetails(userID, newEmail, newUsername, newPassword) {
+  axios.post("http://localhost:3002/api/post/updateDetails", {
+    user_id: userID,
+    user_email: newEmail,
+    user_nickname: newUsername,
+    user_password: newPassword,
+  });
+}
+
+// Ensures all detail fields are valid
+function checkIfDetailsValid(newEmail, newUsername, password, newPassword) {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+
+  //If fields empty, warn
+  if (newEmail == "" || newUsername == "") {
+    alert("Email and Username cannot be empty");
+    return false;
+  } else if (password == "") {
+    alert("Current Password Required");
+    return false;
+  }
+
+  //not empty
+  else if (newEmail != "" || newUsername != "" || password != "") {
+    //email not corect format
+    if (!emailPattern.test(newEmail)) {
+      alert("Please enter a valid email");
+      return false;
+    }
+    //password not correct format
+    if (!passwordPattern.test(newPassword) && newPassword != "") {
+      alert("Please enter a stronger password");
+      return false;
+    }
+  }
+  return true;
+}
+
+// Handles different update cases
+function update(
+  password,
+  oldPassword,
+  newPassword,
+  confirmPassword,
+  userID,
+  newEmail,
+  newUsername
+) {
+  bycrypt.compare(password, oldPassword, function (error, isMatch) {
+    if (isMatch) {
+      // Password not changed
+      if (
+        newPassword == confirmPassword &&
+        newPassword == "" &&
+        confirmPassword == "" &&
+        checkIfDetailsValid(newEmail, newUsername, password, newPassword)
+      ) {
+        putUserDetails(userID, newEmail, newUsername, oldPassword);
+        alert("Email and username updated");
+        window.location.href = "http://localhost:3000/admin-home";
+      }
+      // Password changed and new passwords matches confirmed password
+      else if (
+        newPassword == confirmPassword &&
+        newPassword != "" &&
+        confirmPassword != "" &&
+        checkIfDetailsValid(newEmail, newUsername, password, newPassword)
+      ) {
+        const salt = bycrypt.genSaltSync(10);
+        let hashedNewPassword = bycrypt.hashSync(newPassword, salt);
+        putUserDetails(userID, newEmail, newUsername, hashedNewPassword);
+        alert("Details updated");
+        window.location.href = "http://localhost:3000/admin-home";
+      }
+      // New password doesn't match confirmed password
+      else if (
+        newPassword != confirmPassword &&
+        checkIfDetailsValid(newEmail, newUsername, password, newPassword)
+      ) {
+        alert("Passwords do not match");
+      }
+    } else {
+      if (checkIfDetailsValid(newEmail, newUsername, password, newPassword)) {
+        alert("Incorrect Current Password");
+      }
+    }
+  });
+}
 
 const AdminProfile = (props) => {
   // Get the username, userID, userpassword and useremail from local storage
-  const userID = sessionStorage.getItem('userID');
-  const username = sessionStorage.getItem('username');
-  const email = sessionStorage.getItem('useremail');
-  const oldPassword = sessionStorage.getItem('userpassword')
+  const userID = sessionStorage.getItem("userID");
+  const username = sessionStorage.getItem("username");
+  const email = sessionStorage.getItem("useremail");
+  const oldPassword = sessionStorage.getItem("userpassword");
   let [password, setPassword] = useState("");
   let [newPassword, setNewPassword] = useState("");
   let [confirmPassword, setConfirmPassword] = useState("");
   let [newUsername, setNewUsername] = useState("");
   let [newEmail, setNewEmail] = useState("");
 
-  const salt = bycrypt.genSaltSync(10);
-  let hashedNewPassword = "";
-  
-  // Set local username and email 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    update(
+      password,
+      oldPassword,
+      newPassword,
+      confirmPassword,
+      userID,
+      newEmail,
+      newUsername
+    );
+  };
+
+  // Set local username and email
   const setUserDetails = () => {
-      setNewUsername(username);
-      setNewEmail(email);
-  }
-
-  // Update user details in database
-  const putUserDetails = (newEmail, newUsername, newPassword) => {
-    axios
-      .post("http://localhost:3002/api/post/updateDetails", {user_id: userID, user_email: newEmail, user_nickname: newUsername, user_password: newPassword});
-  }
-
-  // Ensures all detail fields are valid
-  const checkIfDetailsValid = () => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-
-    //If fields empty, warn
-    if(newEmail == "" || newUsername == ""){
-      alert("Email and Username cannot be empty");
-      return false;
-    }
-    else if (password == "") {
-      alert("Current Password Required")
-      return false;
-    }
-
-    //not empty
-    else if (newEmail != "" || newUsername != "" || password != "") {
-      //email not corect format
-      if(!emailPattern.test(newEmail)){
-        alert("Please enter a valid email");
-        return false;
-      }
-      //password not correct format
-      if(!passwordPattern.test(password)){
-        alert("Please enter a stronger password");
-        return false;
-      }
-    }
-    return true;
-  }
-
-  // Handles different update cases
-  const update = () => {
-    bycrypt.compare(password, oldPassword, function (error, isMatch) {
-      if (isMatch) {
-        // Password not changed
-        if ((newPassword == confirmPassword) && (newPassword == "" && confirmPassword == "") && checkIfDetailsValid()) {
-          putUserDetails(newEmail, newUsername, oldPassword);
-          alert("Email and username updated")
-        }
-        // Password changed and new passwords matches confirmed password 
-        else if ((newPassword == confirmPassword) && (newPassword != "" && confirmPassword != "") && checkIfDetailsValid()) {
-          hashedNewPassword = bycrypt.hashSync(newPassword,salt);
-          putUserDetails(newEmail, newUsername, hashedNewPassword);
-          alert("Details updated")
-        } 
-        // New password doesn't match confirmed password
-        else if ((newPassword != confirmPassword) && checkIfDetailsValid()){
-          alert("Passwords do not match");
-        }
-      }
-      else {
-        if (checkIfDetailsValid()) {
-          alert("Incorrect Current Password");
-        }
-        
-      }
-
-    });
-  }
+    setNewUsername(username);
+    setNewEmail(email);
+  };
 
   // Allows current details to display when page loads
   useEffect(() => {
-    setUserDetails()
-  }, []); 
+    setUserDetails();
+  }, []);
 
   return (
     <div className="admin-profile-container">
-      <div data-role="Header" className="admin-profile-navbar-container">
+      <div role="Header" className="admin-profile-navbar-container">
         <div className="admin-profile-navbar">
           <div className="admin-profile-left-side">
             <img
@@ -116,20 +150,17 @@ const AdminProfile = (props) => {
               </svg>
             </div>
             <div className="admin-profile-links-container">
-              <Link to="/player-portal-home" className="admin-profile-link">
+              <Link to="/admin-home" className="admin-profile-link">
                 HOME
               </Link>
               <Link
-                to="/player-portal-competitions"
+                to="/admin-competitions"
                 className="admin-profile-link1 Anchor"
               >
                 COMPETITIONS
               </Link>
-              <Link
-                to="/player-portal-team"
-                className="admin-profile-link2 Anchor"
-              >
-                tEAMS
+              <Link to="/admin-teams" className="admin-profile-link2 Anchor">
+                TEAMS
               </Link>
             </div>
           </div>
@@ -169,43 +200,48 @@ const AdminProfile = (props) => {
       <div className="admin-profile-section-separator1"></div>
       <div className="admin-profile-section-separator2"></div>
       <div className="admin-profile-section-separator3"></div>
-      <div className="admin-profile-container3">
+      <div className="admin-profile-container3" onSubmit={handleSubmit}>
         <span className="admin-profile-text">UPDATE PROFILE</span>
         <InputBoxForInfo
+          data-testid="input-username"
           initialValue={username}
           buttonText="USERNAME"
           onChange={(e) => setNewUsername(e.target.value)}
-        >
-        </InputBoxForInfo>
+        ></InputBoxForInfo>
         <InputBoxForInfo
           initialValue={email}
           buttonText="EMAIL"
           onChange={(e) => setNewEmail(e.target.value)}
-        >
-        </InputBoxForInfo>
-        <InputBoxForInfo 
-          buttonText="Current PASSWORD" 
+        ></InputBoxForInfo>
+        <InputBoxForInfo
+          buttonText="CURRENT PASSWORD"
           isPassword
           onChange={(e) => setPassword(e.target.value)}
-        >
-        </InputBoxForInfo>
-        <InputBoxForInfo 
-          buttonText="PASSWORD" 
+        ></InputBoxForInfo>
+        <InputBoxForInfo
+          buttonText="NEW PASSWORD"
           isPassword
           onChange={(e) => setNewPassword(e.target.value)}
-        >
-        </InputBoxForInfo>
-        <InputBoxForInfo 
-          buttonText="CONFIRM PASSWORD" 
+        ></InputBoxForInfo>
+        <InputBoxForInfo
+          buttonText="CONFIRM PASSWORD"
           isPassword
           onChange={(e) => setConfirmPassword(e.target.value)}
-        >
-        </InputBoxForInfo>
+        ></InputBoxForInfo>
         <Button
+          type="submit"
           name="UPDATE"
           onClick={() => {
-            console.log("Register button clicked");
-            update();
+            // console.log("Register button clicked");
+            update(
+              password,
+              oldPassword,
+              newPassword,
+              confirmPassword,
+              userID,
+              newEmail,
+              newUsername
+            );
           }}
           rootClassName="button-root-class-name4"
         ></Button>
@@ -213,16 +249,16 @@ const AdminProfile = (props) => {
         <Button
           name="LOG OUT"
           onClick={() => {
-            console.log("Log out button clicked");
+            // console.log("Log out button clicked");
             sessionStorage.clear();
-            window.location.href = 'http://localhost:3000/login'
+            window.location.href = "http://localhost:3000";
           }}
           rootClassName="button-root-class-name4"
         ></Button>
         <div className="admin-profile-container4"></div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminProfile
+export { AdminProfile, checkIfDetailsValid, putUserDetails, update };

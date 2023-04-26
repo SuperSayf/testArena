@@ -4,7 +4,6 @@ import bycrypt from 'bcryptjs';
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useState } from "react";
-// const bcrypt = require('bcryptjs');
 import InputBoxForInfo from "../components/input-box-for-info";
 import Button from "../components/button";
 import "./register.css";
@@ -27,7 +26,7 @@ function postUserDetails(name, surname, email, username, hashedPassword) {
 async function checkIfUserExists(username, setErrorMessage) {
   const response = await axios.get("http://localhost:3002/api/get/doesExist/" + username);
   const userExists = response.data;
-  console.log(response.data);
+  // console.log(response.data);
   if (JSON.stringify(userExists) == "[]") {
     setErrorMessage('Account created successfully');
     return true;
@@ -43,7 +42,7 @@ function validateInput(name, surname, email, username, password, setErrorMessage
   const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
   if (name === "" || surname === "" || email === "" || username === "" || password === "") {
-    alert("Please enter all details");
+    setErrorMessage("Please enter all details");
     return false;
   }
   else if (!emailPattern.test(email)) {
@@ -77,7 +76,6 @@ function doRegister(name, surname, email, username, password, setErrorMessage) {
   }
 }
 
-
 const Register = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [name, setName] = useState("");
@@ -85,6 +83,12 @@ const Register = (props) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  // Enter key triggers Register button
+  const handleSubmit = event => {
+    event.preventDefault();
+    doRegister(name, surname, email, username, password, setErrorMessage);
+  };
 
   return (
     <div className="register-container">
@@ -102,7 +106,7 @@ const Register = (props) => {
           </svg>
         </Link>
       </div>
-      <div className="register-container5">
+      <div className="register-container5" onSubmit={handleSubmit}>
         <span className="register-text">
           <span>Register</span>
           <br></br>
@@ -138,12 +142,13 @@ const Register = (props) => {
           isPassword
           rootClassName="input-box-for-info-root-class-name5"
         ></InputBoxForInfo>
-
+        
         <br></br>
         <Button
+          type = "submit"
           name="Register"
           onClick={() => {
-            console.log("Register button clicked");
+            // console.log("Register button clicked");
             doRegister(name, surname, email, username, password, setErrorMessage);
           }}
           rootClassName="button-root-class-name"
@@ -160,5 +165,4 @@ const Register = (props) => {
   );
 };
 
-//export default Register;
 export { Register, validateInput };

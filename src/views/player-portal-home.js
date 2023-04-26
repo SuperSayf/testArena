@@ -15,8 +15,6 @@ const PlayerPortalHome = (props) => {
         sessionStorage.setItem('userID', (response.data)[0].user_id);
         sessionStorage.setItem('useremail', (response.data)[0].user_email);
         sessionStorage.setItem('userpassword',(response.data)[0].user_password);
-        setNewUsername(username);
-        setNewEmail(email);
       });
   }
 
@@ -46,9 +44,6 @@ const PlayerPortalHome = (props) => {
               </Link>
               <Link to="/player-portal-competitions" className="player-portal-home-link1 Anchor">
                 COMPETITIONS
-              </Link>
-              <Link to="/player-portal-team" className="player-portal-home-link2 Anchor">
-                TEAM
               </Link>
               <Link to="/player-portal-contact" className="player-portal-home-link3 Anchor">
                 CONTACT
