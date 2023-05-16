@@ -214,7 +214,7 @@ function GenCards() {
         const compID = response.data[0].competition_id;
         sessionStorage.setItem("CompID", compID);
         setTimeout(function () {
-          window.location.href = "http://localhost:3000/player-portal-team";
+          window.location.href = "https://arena-gamma.vercel.app/player-portal-team";
         }, 1000);
 
         // Can use API route to join competition
@@ -240,7 +240,7 @@ function GenCards() {
     const compID = competition_id;
     sessionStorage.setItem("CompID", compID);
     setTimeout(function () {
-      window.location.href = "http://localhost:3000/arena-main";
+      window.location.href = "https://arena-gamma.vercel.app/arena-main";
     }, 1000);
     // console.log(`Enter Arena clicked for competition ${competition_id}`);
   };

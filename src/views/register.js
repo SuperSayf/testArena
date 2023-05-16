@@ -69,7 +69,7 @@ function doRegister(name, surname, email, username, password, setErrorMessage) {
         if (userExists) {
           postUserDetails(name, surname, email, username, hashedPassword);
           setTimeout(function () {
-            window.location.href = 'http://localhost:3000/login';
+            window.location.href = 'https://arena-gamma.vercel.app/login';
           }, 1000);
         }
       });
@@ -142,10 +142,10 @@ const Register = (props) => {
           isPassword
           rootClassName="input-box-for-info-root-class-name5"
         ></InputBoxForInfo>
-        
+
         <br></br>
         <Button
-          type = "submit"
+          type="submit"
           name="Register"
           onClick={() => {
             // console.log("Register button clicked");

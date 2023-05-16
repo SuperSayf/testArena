@@ -68,7 +68,7 @@ function update(
       ) {
         putUserDetails(userID, newEmail, newUsername, oldPassword);
         alert("Email and username updated");
-        window.location.href = "http://localhost:3000/admin-home";
+        window.location.href = "https://arena-gamma.vercel.app/admin-home";
       }
       // Password changed and new passwords matches confirmed password
       else if (
@@ -81,7 +81,7 @@ function update(
         let hashedNewPassword = bycrypt.hashSync(newPassword, salt);
         putUserDetails(userID, newEmail, newUsername, hashedNewPassword);
         alert("Details updated");
-        window.location.href = "http://localhost:3000/admin-home";
+        window.location.href = "https://arena-gamma.vercel.app/admin-home";
       }
       // New password doesn't match confirmed password
       else if (
@@ -248,7 +248,7 @@ const AdminProfile = (props) => {
           onClick={() => {
             // console.log("Log out button clicked");
             sessionStorage.clear();
-            window.location.href = "http://localhost:3000";
+            window.location.href = "https://arena-gamma.vercel.app";
           }}
           rootClassName="button-root-class-name4"
         ></Button>

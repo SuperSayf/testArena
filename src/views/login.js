@@ -51,7 +51,7 @@ const Login = (props) => {
         if ((response.data)[0].user_admin == "1") {
           setErrorMessage('Login Successful');
           setTimeout(function () {
-            window.location.href = 'http://localhost:3000/admin-competitions';
+            window.location.href = 'https://arena-gamma.vercel.app/admin-competitions';
           }, 500);
           //take him to the admin page
         }
@@ -59,7 +59,7 @@ const Login = (props) => {
           // console.log("this guy is a normal user");
           setErrorMessage('Login Successful');
           setTimeout(function () {
-            window.location.href = 'http://localhost:3000/player-portal-competitions';
+            window.location.href = 'https://arena-gamma.vercel.app/player-portal-competitions';
           }, 500);
           //take him to the normal page
         }

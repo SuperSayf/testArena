@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import {TeamInputBox, location} from "../components/TeamInputBox";
+import { TeamInputBox, location } from "../components/TeamInputBox";
 import JoinTeam from "../components/JoinTeam";
 import { v4 as uuidv4 } from "uuid";
 import "./player-portal-team.css";
@@ -32,7 +32,7 @@ const PlayerPortalTeam = (props) => {
   const [disabled, setDisabled] = useState(false);
   const [no_testcases, setNoTests] = useState(0);
   let inputLocation = " ";
-  
+
   //generate random code for team
   const randomString = () => {
     setDisabled(true);
@@ -123,11 +123,11 @@ const PlayerPortalTeam = (props) => {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Copy'
-      }).then((result) => {
+    }).then((result) => {
       if (result.isConfirmed) {
         copyToClipboard(code);
         setTimeout(() => {
-          window.location.href = "http://localhost:3000/arena-main"
+          window.location.href = "https://arena-gamma.vercel.app/arena-main"
         }, 1000);
       }
     })
@@ -187,7 +187,7 @@ const PlayerPortalTeam = (props) => {
       competition_id: parseInt(competition_id,)
     });
     setTimeout(() => {
-      window.location.href = "http://localhost:3000/arena-main"
+      window.location.href = "https://arena-gamma.vercel.app/arena-main"
     }, 500);
   };
 
