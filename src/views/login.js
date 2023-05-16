@@ -51,7 +51,7 @@ const Login = (props) => {
         if ((response.data)[0].user_admin == "1") {
           setErrorMessage('Login Successful');
           setTimeout(function () {
-            window.location.href = 'http://localhost:3000/admin-home';
+            window.location.href = 'http://localhost:3000/admin-competitions';
           }, 500);
           //take him to the admin page
         }
@@ -59,7 +59,7 @@ const Login = (props) => {
           // console.log("this guy is a normal user");
           setErrorMessage('Login Successful');
           setTimeout(function () {
-            window.location.href = 'http://localhost:3000/player-portal-home';
+            window.location.href = 'http://localhost:3000/player-portal-competitions';
           }, 500);
           //take him to the normal page
         }
@@ -85,26 +85,26 @@ const Login = (props) => {
     });
   }
 
-const handleLogin = () =>{
-  // console.log(
-  //   `Username: ${username}, Password: ${password}`
-  // );
-  sessionStorage.setItem('username', username);
-  axios
-  .get("http://localhost:3002/api/get/userID/" + username)
-  .then(function(response){
-    const userData = response.data;
-    const userID = userData[0].user_id;
-    sessionStorage.setItem('userID', userID);
-  });
-  if(username=="Steve" && password=="SteveIsDaBest"){
-    window.location.href = 'https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiUzc-Bi-39AhWPtqQKHRYUCJQQwqsBegQIChAF&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ&usg=AOvVaw0aHtehaphMhOCAkCydRLZU';
+  const handleLogin = () => {
+    // console.log(
+    //   `Username: ${username}, Password: ${password}`
+    // );
+    sessionStorage.setItem('username', username);
+    axios
+      .get("http://localhost:3002/api/get/userID/" + username)
+      .then(function (response) {
+        const userData = response.data;
+        const userID = userData[0].user_id;
+        sessionStorage.setItem('userID', userID);
+      });
+    if (username == "Steve" && password == "SteveIsDaBest") {
+      window.location.href = 'https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiUzc-Bi-39AhWPtqQKHRYUCJQQwqsBegQIChAF&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ&usg=AOvVaw0aHtehaphMhOCAkCydRLZU';
+    }
+    else {
+      doAPIStuff();
+    }
+
   }
-  else{
-    doAPIStuff();
-  }
-  
-}
 
   return (
     <div className="login-container">
@@ -123,7 +123,7 @@ const handleLogin = () =>{
         <div className="login-container3" onSubmit={handleSubmit}>
           <span className="login-text">LOGIN</span>
           <br></br>
-          
+
           <InputBoxForInfo
             buttonText="USERNAME"
             onChange={(e) => setUsername(e.target.value)}
@@ -136,7 +136,7 @@ const handleLogin = () =>{
           <br></br>
           {errorMessage && <div className="error">{errorMessage}</div>}
           <Button
-            type = "submit"
+            type="submit"
             name="Login"
             onClick={() => {
               // console.log("Login button clicked");
@@ -144,7 +144,6 @@ const handleLogin = () =>{
             }}
             rootClassName="button-root-class-name2"
           ></Button>
-          <div className="login-container4"></div>
           <br></br>
           <span className="login-text1">Don&apos;t have an account? </span>
           <Link to="/register" className="register-navlink1 button">

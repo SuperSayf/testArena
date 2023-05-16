@@ -29,9 +29,6 @@ const PlayerPortalContact = (props) => {
               </svg>
             </div>
             <div className="player-portal-contact-links-container">
-              <Link to="/player-portal-home" className="player-portal-contact-link">
-                HOME
-              </Link>
               <Link to="/player-portal-competitions"className="player-portal-contact-link1 Anchor" >
                 COMPETITIONS
               </Link>
@@ -74,9 +71,6 @@ const PlayerPortalContact = (props) => {
               </div>
             </div>
             <div className="player-portal-contact-links-container1">
-            <Link to="/player-portal-home" className="player-portal-contact-link">
-              HOME
-            </Link>
             <Link to="/player-portal-competitions"className="player-portal-contact-link1 Anchor" >
               COMPETITIONS
             </Link>

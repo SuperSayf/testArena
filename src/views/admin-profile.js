@@ -150,9 +150,6 @@ const AdminProfile = (props) => {
               </svg>
             </div>
             <div className="admin-profile-links-container">
-              <Link to="/admin-home" className="admin-profile-link">
-                HOME
-              </Link>
               <Link
                 to="/admin-competitions"
                 className="admin-profile-link1 Anchor"

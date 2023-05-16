@@ -97,7 +97,7 @@ const Contact = (props) => {
               </svg>
             </div>
             <div className="contact-links-container">
-              <Link to="/home" className="contact-link">
+              <Link to="/" className="contact-link">
                 HOME
               </Link>
               <Link to="/competitions" className="contact-link1 Anchor">

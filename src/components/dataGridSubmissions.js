@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 
 export default function CustomDataGrid(props) {
-  const { numColumns, data } = props;
+  const { numColumns, testcases, data } = props;
 
   const columns = [
     {
@@ -14,7 +14,7 @@ export default function CustomDataGrid(props) {
     },
     ...Array.from({ length: numColumns }, (_, i) => ({
       field: `testcase${i + 1}`,
-      headerName: `Testcase ${i + 1}`,
+      headerName: `${testcases[i]}`,
       width: 150,
       editable: true,
     })),
@@ -30,18 +30,18 @@ export default function CustomDataGrid(props) {
   });
 
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ height: 800, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 5,
+              pageSize: 50,
             },
           },
         }}
-        pageSizeOptions={[5]}
+        pageSizeOptions={[50]}
         disableRowSelectionOnClick
       />
     </Box>

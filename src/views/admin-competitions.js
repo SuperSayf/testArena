@@ -1,42 +1,67 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import DataGrid from "../components/datagrid";
+import DataGrid from "../components/datagridAdminCompetitions";
 import "./admin-competitions.css";
 import Button from "../components/button";
 import "reactjs-popup/dist/index.css";
 import Modal from "react-modal";
 import { useState } from "react";
 import InputBoxForInfo from "../components/input-box-for-info";
-
+import { CommonlyUsedComponents as NewCalenderComp, handleChange } from "../components/NewCalenderComp.js"
 import { PickerOverlay } from "filestack-react";
-import {
-  CalenderComp,
-  startDate,
-  endDate,
-} from "../components/CalenderComp.js";
+import "../components/modal.css";
+import { TeamSizeSelector, min, max , maxTeams} from "../components/TeamSizeSelector.js";
+import InputTextArea from "../components/input-textarea.js"
+
+function getNumTestcases(testcases) {
+  var numtestcases = 1;
+  for (var i = 0; i < testcases.length; i++) {
+    if (testcases[i] === ",") {
+      numtestcases++;
+    }
+  }
+  return numtestcases;
+}
 
 // Modal.setAppElement(el)
 function PostCompDetails(
   compname,
   pic,
-  startDate,
-  endDate,
+  CombinedCompStart,
+  CombinedCompEnd,
   desc,
   pdf,
-  testcaseNum
+  testcaseNum,
+  testcases,
+  marker,
+  CombinedRegStart,
+  CombinedRegEnd,
+  maxTeams,
+  min,
+  max
 ) {
-  console.log(compname, pic, startDate, endDate, desc, pdf, testcaseNum);
   return axios.post("http://localhost:3002/api/post/Create_comp", {
     compname: compname,
     pic: pic,
-    startDate: startDate,
-    endDate: endDate,
+    CombinedCompStart: CombinedCompStart,
+    CombinedCompEnd: CombinedCompEnd,
     desc: desc,
     pdf: pdf,
     testcaseNum: testcaseNum,
+    testcases: testcases,
+    marker: marker,
+    CombinedRegStart: CombinedRegStart,
+    CombinedRegEnd: CombinedRegEnd,
+    numTeams: maxTeams,
+    min: min,
+    max: max
   });
 }
+
+
+
+
 
 function GenGrid() {
   const [rows, setData] = React.useState([]);
@@ -48,62 +73,75 @@ function GenGrid() {
         competition_id: data.competition_id,
         competition_name: data.competition_name,
         competition_views: data.competition_views,
-        competition_image: data.competition_image,
+        registration_startdate: data.registration_startdate,
+        registration_enddate: data.registration_enddate,
         competition_startdate: data.competition_startdate,
         competition_enddate: data.competition_enddate,
-        competition_info: data.competition_info,
-        competition_testcases: data.competition_testcases,
+        competition_no_testcases: data.no_testcases,
       }));
       setData(data);
     });
   }, []);
 
-  const columns = [
-    { field: "competition_id", headerName: "ID", width: 150 },
-    { field: "competition_name", headerName: "Title", width: 150 },
-    { field: "competition_views", headerName: "Views", width: 150 },
-    { field: "competition_image", headerName: "Image", width: 150 },
-    { field: "competition_startdate", headerName: "Start Date", width: 150 },
-    { field: "competition_enddate", headerName: "End Date", width: 150 },
-    { field: "competition_info", headerName: "Info", width: 150 },
-    { field: "competition_testcases", headerName: "Test Cases", width: 150 },
-  ];
-
   return (
-    <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+    <DataGrid rows={rows} pageSize={25} autoHeight={true}/>
   );
 }
 
 const AdminCompetitions = (props) => {
   const [compname, setCompname] = useState("");
-  const [numtestcases, setNumTestCases] = useState(0);
+  const [testcases, setTestCases] = useState("");
   const [desc, setdesc] = useState("");
   const [pic, setpic] = useState("");
   const [pdf, setpdf] = useState("");
+  const [marker, setmarker] = useState("");
+  const [RegStart, setRegStart] = useState(null);
+  const [RegEnd, setRegEnd] = useState(null);
+  const [RegStartTime, setRegStartTime] = useState(null);
+  const [RegEndTime, setRegEndTime] = useState(null);
+  const [CompStart, setCompStart] = useState(null);
+  const [CompEnd, setCompEnd] = useState(null);
+  const [CompStartTime, setCompStartTime] = useState(null);
+  const [CompEndTime, setCompEndTime] = useState(null);
+  let CombinedRegStart = RegStart + " " + RegStartTime;
+  let CombinedRegEnd = RegEnd + " " + RegEndTime;
+  let CombinedCompStart = CompStart + " " + CompStartTime;
+  let CombinedCompEnd = CompEnd + " " + CompEndTime;
 
   const [visible, setvisible] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
+  const username = sessionStorage.getItem('username');
+  
+  // Get user details from database, to make displaying it easier
+  const getUserDetails = () => {
+    axios
+      .get("http://localhost:3002/api/get/userDetails/" + username)
+      .then(function (response) {
+        sessionStorage.setItem('userID', (response.data)[0].user_id);
+        sessionStorage.setItem('useremail', (response.data)[0].user_email);
+        sessionStorage.setItem('userpassword',(response.data)[0].user_password);
+      });
+  }
+
+  window.onload = getUserDetails();
 
   const handleUploadDone = (res) => {
-    // setpic(res.filesUploaded[0].url)
-    // setpdf(res.filesUploaded[0].mimetype)
-    // console.log(pic);
-    // console.log(pdf);
+    console.log(res.filesUploaded[0].url); // Print the URL of the uploaded file
+  console.log(res.filesUploaded[0].mimetype); // Print the MIME type of the uploaded file
 
-    if (
-      res.filesUploaded[0].mimetype === "image/png" ||
-      res.filesUploaded[0].mimetype === "image/jpeg" ||
-      res.filesUploaded[0].mimetype === "image/jpg"
-    ) {
-      // console.log("Image uploaded");
-      // console.log(res.filesUploaded[0].url);
-      setpic(res.filesUploaded[0].url);
-    }
+  if (res.filesUploaded[0].mimetype === "image/png" ||
+    res.filesUploaded[0].mimetype === "image/jpeg" ||
+    res.filesUploaded[0].mimetype === "image/jpg") {
+    setpic(res.filesUploaded[0].url);
+  }
 
-    if (res.filesUploaded[0].mimetype === "application/pdf") {
-      // console.log("PDF uploaded");
-      setpdf(res.filesUploaded[0].url);
-    }
+  if (res.filesUploaded[0].mimetype === "application/pdf") {
+    setpdf(res.filesUploaded[0].url);
+  }
+
+  if (res.filesUploaded[0].mimetype === "text/x-python") {
+    setmarker(res.filesUploaded[0].url);
+  }
   };
 
   const handleClosePicker = () => {
@@ -111,51 +149,60 @@ const AdminCompetitions = (props) => {
   };
 
   return (
-    <div className="admin-competitions-container">
-      <Modal
+    <div className="admin-competitions-container" style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
+      <Modal 
         isOpen={visible}
         style={{
           content: {
-            width: "80%",
-            height: "80%",
+            width: "100%",
+            height: "100%",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            overflowY: "scroll",
+            // maxHeight: "100vh"
           },
           overlay: { zIndex: 1000 },
         }}
       >
+        
         <div
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
-            height: "100%",
           }}
         >
-          <h1>Create a Competition</h1>
+          <h1 style={{ color: "#457B9D" }}>Create Competition</h1>
+          <br/>
 
           <InputBoxForInfo
-            buttonText="Competition Name"
-            onChange={(e) => setCompname(e.target.value)}
+          buttonText="Competition Name"
+          onChange={(e) => {
+          setCompname(e.target.value);
+          console.log("Compname value:", e.target.value);
+          }}
           />
 
-          <InputBoxForInfo
-            buttonText="Number of test cases"
-            onChange={(e) => setNumTestCases(e.target.value)}
-          />
+          <br/>
+
+          <h3 style={{ color: "#457B9D" }}>Team Size</h3>
 
           <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
-            <Button
-              name="Upload PDF"
-              style={{ background: "#457B9D", color: "white" }}
-              onClick={() => {
-                setPickerVisible(true);
-                // console.log("Picker clicked");
-              }}
-            />
+            <TeamSizeSelector />
           </div>
+
+          <h3 style={{ color: "#457B9D", textAlign: "center"  }}>Test Case Names</h3>
+
+          <InputTextArea 
+            label="testcase 1, testcase 2, etc..."
+            onChange={(e) => setTestCases(e.target.value)}
+          ></InputTextArea>
+
+          <br/>
+
+          <h3 style={{ color: "#457B9D" }}>Uploads</h3>
 
           <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
             <Button
@@ -163,11 +210,30 @@ const AdminCompetitions = (props) => {
               style={{ background: "#457B9D", color: "white" }}
               onClick={() => {
                 setPickerVisible(true);
-                // console.log("Picker clicked");
               }}
             />
           </div>
 
+          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
+            <Button
+              name="Upload Competition PDF"
+              style={{ background: "#457B9D", color: "white" }}
+              onClick={() => {
+                setPickerVisible(true);
+              }}
+            />
+          </div>
+
+          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
+            <Button
+              name="Upload Marker Script"
+              style={{ background: "#457B9D", color: "white" }}
+              onClick={() => {
+                setPickerVisible(true);
+              }}
+            />
+          </div>
+     
           {pickerVisible && (
             <div
               className="center"
@@ -187,18 +253,48 @@ const AdminCompetitions = (props) => {
               />
             </div>
           )}
+          <br/>
+          <h3 style={{ color: "#457B9D" }}>Registration Period Details</h3>
 
-          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
-            <CalenderComp></CalenderComp>
+          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>  
+            <NewCalenderComp
+              date1_label="Registration Opening Date"
+              date2_label="Registration Closing Date"
+              time1_label="Registration Opening Time"
+              time2_label="Registration Closing Time"
+              onStartDateChange={(date) => {setRegStart(date)}}
+              onEndDateChange={(date) => {setRegEnd(date)}}
+              onStartTimeChange={(date) => {setRegStartTime(date)}}
+              onEndTimeChange={(date) => {setRegEndTime(date)}}
+            ></NewCalenderComp>
           </div>
 
-          <div>
-            <InputBoxForInfo
-              style={{ width: 400, height: 400 }}
-              buttonText="Competition Description"
-              onChange={(e) => setdesc(e.target.value)}
-            />
+          <br/>
+          <h3 style={{ color: "#457B9D" }}>Competing Period Details</h3>
+
+          <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>  
+            <NewCalenderComp
+              date1_label="Competing Opening Date"
+              date2_label="Competing Closing Date"
+              time1_label="Competing Opening Time"
+              time2_label="Competing Closing Time"
+              onStartDateChange={(date) => {setCompStart(date)}}
+              onEndDateChange={(date) => {setCompEnd(date)}}
+              onStartTimeChange={(date) => {setCompStartTime(date)}}
+              onEndTimeChange={(date) => {setCompEndTime(date)}}
+            ></NewCalenderComp>
           </div>
+
+          <br/>
+          <h3 style={{ color: "#457B9D" }}>Competition Description</h3>
+
+          <InputTextArea 
+          label="Competition Description"
+          onChange={(e) => {
+          setdesc(e.target.value);
+          }}
+          ></InputTextArea>
+
 
           <div style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}>
             <Button
@@ -208,20 +304,34 @@ const AdminCompetitions = (props) => {
                 setPickerVisible(false);
                 // console.log("Create button clicked");
                 // console.log("Competition Name is:" + compname);
-                // console.log("Test cases are:" + numtestcases);
-                // console.log("startDate: " + startDate);
-                // console.log("endDate: " + endDate);
-                // console.log("Desc: " + desc);
+                // console.log("Number of teams is " + maxTeams);
+                // console.log("Team min is:" + min);
+                // console.log("Team max is:" + max);
+                // console.log("Test cases are:" + testcases);
+                // console.log("Num testcases is:" + getNumTestcases(testcases));
                 // console.log("pic link is:" + pic);
                 // console.log("pdf link is:" + pdf);
+                // console.log("marker link is:" + marker);
+                // console.log("regStartDate: " + CombinedRegStart);
+                // console.log("regEndDate: " + CombinedRegEnd);
+                // console.log("compStartDate: " + CombinedCompStart);
+                // console.log("compEndDate: " + CombinedCompEnd);
+                // console.log("Desc: " + desc);
                 PostCompDetails(
                   compname,
                   pic,
-                  startDate,
-                  endDate,
+                  CombinedCompStart,
+                  CombinedCompEnd,
                   desc,
                   pdf,
-                  parseInt(numtestcases)
+                  getNumTestcases(testcases),
+                  testcases,
+                  marker,
+                  CombinedRegStart,
+                  CombinedRegEnd,
+                  maxTeams,
+                  min,
+                  max
                 );
                 window.location.reload(false);
               }}
@@ -257,9 +367,6 @@ const AdminCompetitions = (props) => {
               </svg>
             </div>
             <div className="admin-competitions-links-container">
-              <Link to="/admin-home" className="admin-competitions-link">
-                HOME
-              </Link>
               <Link
                 to="/admin-competitions"
                 className="admin-competitions-link1 Anchor"
@@ -324,7 +431,7 @@ const AdminCompetitions = (props) => {
         </div>
       </div>
 
-      <div className="grid-container">
+      <div className="grid-container" style={{height: "800px"}}>
         <GenGrid />
       </div>
 
@@ -336,6 +443,7 @@ const AdminCompetitions = (props) => {
         }}
         // rootClassName="button-root-class-name2"
       />
+      <br/>
     </div>
   );
 };

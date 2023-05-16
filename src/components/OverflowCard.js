@@ -7,7 +7,7 @@ import Typography from "@mui/joy/Typography";
 import { borderRadius } from "@mui/system";
 
 export default function OverflowCard(props) {
-  const { image, title, description, views, endDate, onClick } = props;
+  const { image, title, description, views, endDate, registration_startdate, onClick } = props;
   const [transform, setTransform] = React.useState("");
   const [flipped, setFlipped] = React.useState(false);
 
@@ -16,9 +16,8 @@ export default function OverflowCard(props) {
     const boundingRect = card.getBoundingClientRect();
     const offsetX = event.clientX - boundingRect.left - boundingRect.width / 2;
     const offsetY = event.clientY - boundingRect.top - boundingRect.height / 2;
-    const transform = `perspective(600px) rotateX(${
-      -offsetY / 10
-    }deg) rotateY(${offsetX / 10}deg)`;
+    const transform = `perspective(600px) rotateX(${-offsetY / 10
+      }deg) rotateY(${offsetX / 10}deg)`;
     setTransform(transform);
   };
 
@@ -107,8 +106,13 @@ export default function OverflowCard(props) {
             level="body3"
             sx={{ fontWeight: "md", color: "text.secondary" }}
           >
-            {endDate}
+            {/* Display date and time separately */}
+            Reg Date:{" "}
+            {new Date(registration_startdate).toLocaleDateString()}{" "}
+            {new Date(registration_startdate).toLocaleTimeString()}
           </Typography>
+
+
         </CardOverflow>
       </div>
       <div style={backStyles}>

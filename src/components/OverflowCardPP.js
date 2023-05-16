@@ -17,6 +17,8 @@ export default function OverflowCardPP(props) {
     isRegistered,
     onButton1Click,
     onButton2Click,
+    registration_startdate,
+    isDisabled,
   } = props;
   const [transform, setTransform] = React.useState("");
   const [flipped, setFlipped] = React.useState(false);
@@ -26,9 +28,8 @@ export default function OverflowCardPP(props) {
     const boundingRect = card.getBoundingClientRect();
     const offsetX = event.clientX - boundingRect.left - boundingRect.width / 2;
     const offsetY = event.clientY - boundingRect.top - boundingRect.height / 2;
-    const transform = `perspective(600px) rotateX(${
-      -offsetY / 10
-    }deg) rotateY(${offsetX / 10}deg)`;
+    const transform = `perspective(600px) rotateX(${-offsetY / 10
+      }deg) rotateY(${offsetX / 10}deg)`;
     setTransform(transform);
   };
 
@@ -126,8 +127,12 @@ export default function OverflowCardPP(props) {
             level="body3"
             sx={{ fontWeight: "md", color: "text.secondary" }}
           >
-            {endDate}
+            {/* Display date and time separately */}
+            Reg Date:{" "}
+            {new Date(registration_startdate).toLocaleDateString()}{" "}
+            {new Date(registration_startdate).toLocaleTimeString()}
           </Typography>
+
         </CardOverflow>
       </div>
       <div style={backStyles}>
@@ -135,8 +140,9 @@ export default function OverflowCardPP(props) {
           {/* Add Whatever for the back of the card */}
 
           <Typography level="body2" sx={{ mt: 2, mb: 2 }}>
-            {description}
+            {description.length > 100 ? description.substring(0, 100) + "..." : description}
           </Typography>
+
 
           {isRegistered && (
             <Button name="Enter Arena" onClick={handleBtn2Click} />
@@ -149,9 +155,11 @@ export default function OverflowCardPP(props) {
             name={isRegistered ? "Leave" : "Register Now"}
             onClick={handleBtn1Click}
             style={
-              isRegistered ? { backgroundColor: "rgba(255, 0, 0, 0.5)", color:"black" } : {}
+              isRegistered ? { backgroundColor: "rgba(255, 0, 0, 0.5)", color: "black" } : {}
             }
+            disabled={isDisabled} // Add this line
           />
+
         </CardOverflow>
       </div>
     </Card>

@@ -32,7 +32,6 @@ describe("JoinTeam component", () => {
     it("should update input value when user types", () => {
         const { getByTestId } = render(<JoinTeam />);
         const input = getByTestId("input");
-        //fireEvent.change(input, { target: { value: "Test input" } });
         input.value= "Test input";
         expect(input.value).toBe("Test input");
     });

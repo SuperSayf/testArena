@@ -109,7 +109,12 @@ const PlayerPortalTeam = (props) => {
       testcase_highest: createJsonArray(no_testcases),
       team_name: teamName,
     });
-    // console.log(username);
+    axios.post("http://localhost:3002/api/post/addTo/team", {
+      user_id: parseInt(userID),
+      team_name: teamName,
+      team_code: code,
+      competition_id: parseInt(competition_id)
+    });
     Swal.fire({
       title: 'Team created!',
       text: "Team Code: " + code,
@@ -174,13 +179,12 @@ const PlayerPortalTeam = (props) => {
       });
   };
 
-  const joinTeam = (teamName, teamCode, locationValue) => {
+  const joinTeam = (teamName, teamCode) => {
     axios.post("http://localhost:3002/api/post/addTo/team", {
-      user_id: userID,
+      user_id: parseInt(userID),
       team_name: teamName,
       team_code: teamCode,
-      competition_id: competition_id,
-      team_location: locationValue,
+      competition_id: parseInt(competition_id,)
     });
     setTimeout(() => {
       window.location.href = "http://localhost:3000/arena-main"
@@ -206,12 +210,6 @@ const PlayerPortalTeam = (props) => {
               </svg>
             </div>
             <div className="player-portal-team-links-container">
-              <Link
-                to="/player-portal-home"
-                className="player-portal-team-link"
-              >
-                HOME
-              </Link>
               <Link
                 to="/player-portal-competitions"
                 className="player-portal-team-link1 Anchor"
@@ -260,12 +258,6 @@ const PlayerPortalTeam = (props) => {
               </div>
             </div>
             <div className="player-portal-team-links-container1">
-              <Link
-                to="/player-portal-home"
-                className="player-portal-team-link"
-              >
-                HOME
-              </Link>
               <Link
                 to="/player-portal-competitions"
                 className="player-portal-team-link1 Anchor"

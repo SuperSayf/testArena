@@ -40,7 +40,7 @@ describe("GenCards component", () => {
 
     const cards = screen.getAllByTestId("card");
 
-    expect(cards).toHaveLength(1);
+    expect(cards).toHaveLength(4);
   });
 
   it("should handle card click", async () => {

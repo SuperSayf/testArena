@@ -7,34 +7,61 @@ import DataGrid from "../components/dataGridSubmissions";
 
 const competition_id = sessionStorage.getItem('CompID');
 const user_id  = sessionStorage.getItem('userID');
+let testcases = "";
 
+function getTests() {
+  return new Promise((resolve, reject) => {
+    axios
+    .get("http://localhost:3002/api/get/Testcases/" + competition_id)
+    .then(function(response){
+      testcases = response.data[0].testcases;
+    });
+    resolve(testcases);
+  });
+}
 
 const ArenaSubmissions = (props) => {
   const [numTests, setNumTests] = useState(0);
   const [data, setData] = useState([]);
-  
+  const [title, setTitle] = useState("");
   useEffect(() => {
+
+    const fetchData = async () => {
+      await getTests();
+    };
+    fetchData();
+
     axios.get(`http://localhost:3002/api/get/numTests/${competition_id}`)
       .then(response => {
         setNumTests(response.data[0].no_testcases); 
-        // console.log(response.data[0].no_testcases) 
       });
-  
+      
     axios.get(`http://localhost:3002/api/get/testcase_prev/${competition_id}/${user_id}`)
-      .then(response => {
-        const historyJSON = JSON.parse(response.data[0].testcase_prev);
-        const newData = Object.values(historyJSON).map(testcaseObj => {
-          const testcaseData = [];
-          for (let i = 1; i <= numTests; i++) {
-            testcaseData.push(testcaseObj[`testcase_${i}`]);
-          }
-          return testcaseData;
-        });
-        setData(newData);
-        // console.log(newData);
+    .then(response => {
+      const historyJSON = JSON.parse(response.data[0].testcase_prev);
+      const newData = Object.values(historyJSON).map(testcaseObj => {
+        const testcaseData = [];
+        for (let i = 1; i <= numTests; i++) {
+          const testcaseValue = testcaseObj[`testcase_${i}`];
+          testcaseData.push(testcaseValue === 0 ? '-' : testcaseValue);
+        }
+        return testcaseData;
       });
-  }, [competition_id, user_id, numTests]);
+      setData(newData);
+      // console.log(newData);
+    });
+    
 
+    axios
+    .get("http://localhost:3002/api/get/compDetails/" + competition_id)
+    .then(function (response) {
+      setTitle(response.data[0].competition_name);
+      
+    });
+  
+  }, [competition_id, user_id, numTests]);
+  let testsArray = testcases.split(",");
+  
   return (
     <div className="arena-submissions-container">
       <div data-role="Header" className="arena-submissions-navbar-container">
@@ -53,10 +80,12 @@ const ArenaSubmissions = (props) => {
                 <path d="M128 256h768v86h-768v-86zM128 554v-84h768v84h-768zM128 768v-86h768v86h-768z"></path>
               </svg>
             </div>
-            <svg viewBox="0 0 1024 1024" className="arena-submissions-icon2">
-              <path d="M896 470v84h-604l152 154-60 60-256-256 256-256 60 60-152 154h604z"></path>
-            </svg>
             <div className="arena-submissions-links-container">
+              <Link to="/player-portal-competitions" className="arena-back-link">
+                <svg viewBox="0 0 1024 1024" className="arena-main-icon2">
+                  <path d="M896 470v84h-604l152 154-60 60-256-256 256-256 60 60-152 154h604z"></path>
+                </svg>
+              </Link>
               <Link to="/arena-main" className="arena-main-link">
                 ARENA
               </Link>
@@ -121,11 +150,12 @@ const ArenaSubmissions = (props) => {
       <div className="arena-submissions-section-separator1"></div>
       <div className="arena-submissions-section-separator2"></div>
       <div className="arena-submissions-section-separator3"></div>
-      <br/>
-      <h1>Submission History</h1>
+      <br />
+      <h1>{title}</h1>
+      <h2>Submissions History</h2>
       <br/>
       <div>
-      <DataGrid numColumns={numTests} data={data} />
+      <DataGrid numColumns={numTests} testcases={testsArray} data={data} />
     </div>
     </div >
     

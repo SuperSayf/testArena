@@ -43,9 +43,6 @@ const AdminTeams = (props) => {
               </svg>
             </div>
             <div className="admin-teams-links-container">
-              <Link to="/admin-home" className="admin-teams-link">
-                HOME
-              </Link>
               <Link to="/admin-competitions" className="admin-teams-link1 Anchor">
                 COMPETITIONS
               </Link>

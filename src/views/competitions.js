@@ -41,6 +41,7 @@ function GenCards() {
           image: data.competition_image,
           description: data.competition_info,
           endDate: data.competition_enddate,
+          registration_startdate: data.registration_startdate,
         }));
         return data;
       });
@@ -73,6 +74,13 @@ function GenCards() {
       return endDate > now;
     });
 
+    // Sort by end date
+    activeCards.sort((a, b) => {
+      const dateA = new Date(a.endDate);
+      const dateB = new Date(b.endDate);
+      return dateA - dateB;
+    });
+
     return activeCards;
   };
 
@@ -85,8 +93,16 @@ function GenCards() {
       return endDate <= now;
     });
 
+    // Sort by start date
+    InactiveCards.sort((a, b) => {
+      const dateA = new Date(a.endDate);
+      const dateB = new Date(b.endDate);
+      return dateB - dateA;
+    });
+
     return InactiveCards;
   };
+
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -127,13 +143,22 @@ function GenCards() {
       try {
         const response = axios.post(
           "http://localhost:3002/api/post/competition/incViews",
-          { competition_id: competition_id }
+          { competition_id }
         );
 
-        const newCardsData = [...cardsData];
-        newCardsData[competition_id - 1].views += 1;
+        const newCardsData = cardsData.map((cardData) => {
+          if (cardData.competition_id === competition_id) {
+            return {
+              ...cardData,
+              views: cardData.views + 1,
+            };
+          }
+          return cardData;
+        });
         setCardsData(newCardsData);
-        // console.log(response);
+        setActiveData(fetchActiveData(newCardsData));
+        setInactiveData(fetchInactiveData(newCardsData));
+        console.log(response);
         setIsFlipped(false);
       } catch (error) {
         console.error(error);

@@ -1,18 +1,88 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TeamManager from '../components/team-manager'
-
+import axios from "axios";
 import './arena-team.css'
+import Swal from 'sweetalert2'
+
+const competition_id = sessionStorage.getItem('CompID');
+const user_id = sessionStorage.getItem('userID');
+let teamIds = [];
+let teamLocation = ""
+
+// Function to copy a value to clipboard
+const copyToClipboard = (value) => {
+  const textarea = document.createElement('textarea'); // Create a textarea element
+  textarea.value = value; // Set the value to the textarea
+  document.body.appendChild(textarea); // Append the textarea to the body
+  textarea.select(); // Select the textarea
+  document.execCommand('copy'); // Copy the selected text to clipboard
+  document.body.removeChild(textarea); // Remove the textarea from the body
+};
+
+function handleInputSubmit(){
+  
+}
 
 const ArenaTeam = (props) => {
 
 
   const [disabled, setDisabled] = useState(false);
-
-  const handleInputSubmit = () => {
-    console.log("Input value: Hello");
-  }
+  const [title, setTitle] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [userNicknames, setUserNicknames] = useState([]);
+  const [teamCode, setTeamCode] = useState("");
+  //const [teamLocation, setTeamLocation] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get the team name
+        const teamNameResponse = await axios.get(`http://localhost:3002/api/get/teamName/${user_id}/${competition_id}`);
+        const teamName = teamNameResponse.data[0].team_name;
+  
+        // Get the team location
+        const teamLocationResponse = await axios.get(`http://localhost:3002/api/get/teamLocation/${teamName}/${competition_id}`);
+         teamLocation = teamLocationResponse.data[0].team_location;
+  
+        // Get the team code
+        const teamCodeResponse = await axios.get(`http://localhost:3002/api/get/teamCode/${teamName}/${competition_id}`);
+        const teamCode = teamCodeResponse.data[0].team_code;
+  
+        // Get the competition details
+        const compDetailsResponse = await axios.get(`http://localhost:3002/api/get/compDetails/${competition_id}`);
+        const title = compDetailsResponse.data[0].competition_name;
+  
+        // Get the team members
+        const teamMembersResponse = await axios.post(`http://localhost:3002/api/get/teamMembers`, null, {
+          params: {
+            user_id: user_id,
+            competition_id: competition_id
+          }
+        });
+        const teamMembers = teamMembersResponse.data;
+  
+        // Get the user nicknames
+        const userIds = teamMembers.map(member => member.user_id);
+        const userNicknameResponses = await Promise.all(userIds.map(userId => axios.get(`http://localhost:3002/api/get/userNickname/${userId}`)));
+        const userNicknames = userNicknameResponses.map((response, index) => {
+          const nickname = response.data[0].user_nickname;
+          const isCaptain = teamMembers.find(member => member.user_id === userIds[index]).is_captain;
+          return isCaptain ? `${nickname} (Captain)` : nickname;
+        });
+  
+        // Update the state
+        setTeamName(teamName);
+        setTeamCode(teamCode);
+        setTitle(title);
+        setUserNicknames(userNicknames);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+  
 
 
   return (
@@ -92,19 +162,35 @@ const ArenaTeam = (props) => {
       <div className="arena-team-section-separator1"></div>
       <div className="arena-team-section-separator2"></div>
       <div className="arena-team-section-separator3"></div>
-
+      <br/>
+      <h1>{title}</h1>
+      <h2>Team Manager</h2>
+      
       <TeamManager
-        TeamName="Team Name"
-        TeamMember1="Team Member 1"
-        TeamMember2="Team Member 2"
-        TeamMember3="Team Member 3"
-        TeamMember4="Team Member 4"
-        location = "Gauteng"
+        TeamName={teamName}
+        teamMembers = {userNicknames}
+        location = {teamLocation}
         Ldisabled={disabled}
         LonClick={handleInputSubmit}
         DName="Delete this team"
         Ddisabled={disabled}
         DonClick={handleInputSubmit}
+        onCopyClick={() => {
+          Swal.fire({
+            title: 'Team created!',
+            text: "Team Code: " + teamCode,
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Copy'
+            }).then((result) => {
+            if (result.isConfirmed) {
+              copyToClipboard(teamCode);
+              
+            }
+          })
+        }}
       />
 
     </div>

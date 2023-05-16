@@ -156,39 +156,6 @@ describe('update function', () => {
     });
 });
 
-// describe('InputBoxForInfo', () => {
-//     test('updates new email when input field changes', () => {
-//       // Arrange
-//       const initialValue = '';
-//       const buttonText = 'EMAIL';
-//       const setIsLoading = jest.fn();
-//       const setNewUsername = jest.fn();
-//       const setPassword = jest.fn();
-//       const setNewPassword = jest.fn();
-//       const setConfirmPassword = jest.fn();
-//       const setNewEmail = jest.fn();
-//       useState.mockImplementation((initialValue) => [initialValue, setNewEmail]);
-//       render(
-//         <InputBoxForInfo
-//           initialValue={initialValue}
-//           buttonText={buttonText}
-//           setIsLoading={setIsLoading}
-//           setNewUsername={setNewUsername}
-//           setPassword={setPassword}
-//           setNewPassword={setNewPassword}
-//           setConfirmPassword={setConfirmPassword}
-//         />
-//       );
-//       const newEmailInput = screen.getByLabelText('EMAIL');
-  
-//       // Act
-//       fireEvent.change(newEmailInput, { target: { value: 'test@test.com' } });
-  
-//       // Assert that the new email has been updated
-//         expect(newEmailInput.value).toBe('test@test.com');
-
-//     });
-//   });
 
 describe('ArenaProfile', () => {
     test('renders navbar', () => {
@@ -238,3 +205,40 @@ describe('ArenaProfile', () => {
       expect(confirmPasswordInput.value).toBe('newpassword');
     });
   });
+
+
+
+
+  // describe('InputBoxForInfo', () => {
+//     test('updates new email when input field changes', () => {
+//       // Arrange
+//       const initialValue = '';
+//       const buttonText = 'EMAIL';
+//       const setIsLoading = jest.fn();
+//       const setNewUsername = jest.fn();
+//       const setPassword = jest.fn();
+//       const setNewPassword = jest.fn();
+//       const setConfirmPassword = jest.fn();
+//       const setNewEmail = jest.fn();
+//       useState.mockImplementation((initialValue) => [initialValue, setNewEmail]);
+//       render(
+//         <InputBoxForInfo
+//           initialValue={initialValue}
+//           buttonText={buttonText}
+//           setIsLoading={setIsLoading}
+//           setNewUsername={setNewUsername}
+//           setPassword={setPassword}
+//           setNewPassword={setNewPassword}
+//           setConfirmPassword={setConfirmPassword}
+//         />
+//       );
+//       const newEmailInput = screen.getByLabelText('EMAIL');
+  
+//       // Act
+//       fireEvent.change(newEmailInput, { target: { value: 'test@test.com' } });
+  
+//       // Assert that the new email has been updated
+//         expect(newEmailInput.value).toBe('test@test.com');
+
+//     });
+//   });

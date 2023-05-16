@@ -6,17 +6,62 @@ import "./arena-main.css";
 //import tabs from "../components/tabs"
 import BasicTabs from "../components/tabs";
 import { PickerOverlay } from "filestack-react";
-import { sub } from "date-fns";
-import { ConstructionOutlined, ControlPointSharp } from "@mui/icons-material";
+import { sub, subHours } from "date-fns";
+import {
+  ConstructionOutlined,
+  ControlPointSharp,
+  DisabledByDefault,
+} from "@mui/icons-material";
 import { Tab } from "@mui/material";
+import Modal from "react-modal";
+import "../components/modal.css";
 import { da, hi } from "date-fns/locale";
+import Button from "../components/button";
+import InputTextArea from "../components/input-textarea";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 const competition_id = sessionStorage.getItem("CompID");
 const user_id = sessionStorage.getItem("userID");
 let tabIndex = -1;
 let latestSubmissionScores = [0];
+let subHistory = [0];
+let highestSubArray = [0]
 let newHighestSub = "";
 let numTests = 0;
+let testcases = "";
+let uploadedTXT = false;
+let uploadedZIP = false;
+let linkForPDF = "";
+let TXTLink = ""
+let ZIPLink = ""
+let Mark = 0
+
+async function handleUploadTXTDone(res) {
+  console.log(res.filesUploaded[0].url);
+  TXTLink = res.filesUploaded[0].url;
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3002/api/get/upload/score",
+      {
+        textFileUrl: res.filesUploaded[0].url,
+        competitionId : competition_id
+      }
+    );
+    Mark = response.data;
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+function handleUploadZIPDone(res) {
+  console.log(res.filesUploaded[0].url);
+  ZIPLink = res.filesUploaded[0].url
+}
+
 
 //Function to set the latest scores
 function getLatestScores() {
@@ -74,12 +119,19 @@ function getTeamID() {
 }
 
 //! Gets the testCases for the competition
-function getCompTestCases(linkForPDF) {
-  axios
-    .get("http://localhost:3002/api/get/compTestCases/" + competition_id)
-    .then(function (response) {
-      linkForPDF = response.data[0].competition_testcases;
-      // console.log(linkForPDF);
+function getCompTestCases() {
+    return new Promise((resolve, reject) => {
+      axios
+      .get("http://localhost:3002/api/get/Testcases/" + competition_id)
+      .then(function(response){
+        testcases = response.data[0].testcases;
+        console.log(testcases);
+        resolve(testcases);
+      })
+      .catch(function (error) {
+        console.error(error);
+        reject(error);
+      });
     });
 }
 
@@ -97,6 +149,19 @@ function getLinkForPDF() {
         reject(error);
       });
   });
+}
+
+function getHighest(){
+  axios.get("http://localhost:3002/api/get/testcase_highest/" +competition_id +"/" +user_id)
+  .then(function (response) {
+    const latestString = response.data[0].testcase_highest;
+        const jsonArray = JSON.parse(latestString);
+        let count = 0;
+        for (let key in jsonArray) {
+          highestSubArray[count] = jsonArray[key];
+          count++;
+        }
+  })
 }
 
 function ScoredHigher() {
@@ -120,8 +185,9 @@ function ScoredHigher() {
           count++;
         }
         for (let i = 0; i < latestSubmissionScores.length; i++) {
-            // console.log(latestSubmissionScores[i] + " " + highestSub[i])
+           console.log(latestSubmissionScores[i] + " " + highestSub[i])
           if (latestSubmissionScores[i] > highestSub[i]) {
+            
             //Change only the one that is higher
             highestSub[i] = latestSubmissionScores[i];
             isHigher = true;
@@ -142,7 +208,7 @@ function ScoredHigher() {
 async function postHighestScore() {
   try {
     const [isHigher, newHighestSub] = await ScoredHigher();
-      // console.log(newHighestSub);
+    // console.log(newHighestSub);
 
     if (isHigher) {
       const response = await axios.post(
@@ -165,12 +231,25 @@ async function uploadSubmissions() {
   //Make the JSON String thing
   // console.log(latestSubmissionScores);
   const obj = {};
+  const obj1 = {};
 
   latestSubmissionScores.map((value, index) => {
     obj[`testcase_${index + 1}`] = value;
   });
 
+  //Seperate one for submission history
+  latestSubmissionScores.map((value, index) => {
+    if (index != tabIndex-1){
+      obj1[`testcase_${index + 1}`] = 0;
+    }
+    else{
+      obj1[`testcase_${index + 1}`] = value;
+    }
+    });
+
   const newSub = JSON.stringify(obj);
+  const subHist = JSON.stringify(obj1);
+  console.log(subHist)
   // console.log("hello?");
   //Upload to submission history:
   axios
@@ -182,7 +261,7 @@ async function uploadSubmissions() {
     )
     .then(function (response) {
       if (response.data[0].testcase_prev == null) {
-        const originalObject = JSON.parse(newSub);
+        const originalObject = JSON.parse(subHist);
         const newObject = { 0: originalObject };
         const newString = JSON.stringify(newObject);
         axios.post("http://localhost:3002/api/post/testcasePrev/team", {
@@ -193,7 +272,7 @@ async function uploadSubmissions() {
         // console.log(response.data[0].testcase_prev);
         const data = JSON.parse(response.data[0].testcase_prev);
         const nextKey = Object.keys(data).length.toString();
-        const updatedData = { ...data, [nextKey]: obj };
+        const updatedData = { ...data, [nextKey]: obj1 };
         const updatedDataString = JSON.stringify(updatedData);
         // console.log(updatedDataString);
         axios.post("http://localhost:3002/api/post/testcasePrev/team", {
@@ -210,25 +289,30 @@ async function uploadSubmissions() {
   });
 
   await postHighestScore();
-  
 }
 
 const ArenaMain = (props) => {
-  
-  const [pickerVisible, setPickerVisible] = useState(false);
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const [pickerTXTVisible, setTXTPickerVisible] = useState(false);
+  const [pickerZIPVisible, setZIPPickerVisible] = useState(false);
+  const [showTXTAlert, setShowTXTAlert] = useState(false);
   //This stores contents of tab, tab number and index in the array are related
   const [title, setTitle] = useState("");
   const [paragraph, setParagraph] = useState("");
 
-  let linkForPDF = "";
 
+  // const [uploadedTXT, setUploadTXT] = useState(false);
+  // const [uploadedZIP, setUploadZIP] = useState(false);
+
+  const [disabled, setDisabled] = useState(true);
   //Executes when the page is loaded
   React.useEffect(() => {
     const fetchData = async () => {
       await getLatestScores();
+      await getCompTestCases();
       setIsLoaded(true);
     };
+    getHighest();
     fetchData();
     getNumTestCases(numTests);
     axios
@@ -238,21 +322,183 @@ const ArenaMain = (props) => {
         setParagraph(response.data[0].competition_info);
       });
     //Sets the link for the competition testcases
-    getCompTestCases(linkForPDF);
     getTeamID();
   }, []);
 
   const [isLoaded, setIsLoaded] = React.useState(false);
   //Sets the pickerVisible to false, so you can actually click it again
   const handleClosePicker = () => {
-    setPickerVisible(false);
+    setTXTPickerVisible(false);
+    setZIPPickerVisible(false);
   };
   //Returns the url for the file uploaded
-  const handleUploadDone = (res) => {
-    
-  };
+  const handleUploadDone = (res) => {};
   return (
     <div className="arena-main-container">
+      <Modal
+        isOpen={modalVisible}
+        style={{
+          content: {
+            width: "90%",
+            height: "90%",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            overflowY: "scroll",
+          },
+          overlay: { zIndex: 1000 },
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "100%",
+            marginLeft: 200,
+            marginRight: 200,
+          }}
+        >
+          <h1>Submit your solutions</h1>
+          <br />
+          <h3>Instructions:</h3>
+          <p>
+            To submit your solution, make sure you have both a .txt file and a
+            .zip file. The .txt file should contain the output of your code,
+            while the .zip file should contain your actual code. Look for
+            separate "Upload" buttons for each file on the submission page.
+            Click the "Upload" button for the .txt file, select the file from
+            your local computer, and wait for the upload to complete. Next,
+            click the "Upload" button for the .zip file, select the file from
+            your local computer, and wait for the upload to complete. You may
+            also add any comments to your submission before submitting it.
+            Review your submission and click the "Submit" button. If any errors
+            occur, correct them before proceeding.
+          </p>
+
+          {pickerTXTVisible && (
+            <div
+              className="center"
+              style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}
+            >
+              <PickerOverlay
+                key="picker-overlay"
+                apikey={process.env.REACT_APP_API_KEY_FILESTACK}
+                onUploadDone={(res) => {
+                  if (res.filesUploaded[0].mimetype === 'text/plain') {
+                  handleUploadTXTDone(res);
+                  uploadedTXT = true;
+                  //Checks if both are uploaded
+                  if (uploadedZIP == true && uploadedTXT == true) {
+                    setDisabled(false);
+                  }
+                  }else{
+                    setShowTXTAlert(true)
+                    console.log(showTXTAlert)
+                  }
+                }}
+                pickerOptions={{
+                  onClose: () => {
+                    handleClosePicker();
+                  },
+                }}
+              />
+            </div>
+          )}
+
+          {pickerZIPVisible && (
+            <div
+              className="center"
+              style={{ marginLeft: 6, marginBottom: 10, marginTop: 5 }}
+            >
+              <PickerOverlay
+                key="picker-overlay"
+                apikey={process.env.REACT_APP_API_KEY_FILESTACK}
+                onUploadDone={(res) => {
+                    handleUploadDone(res);
+                    uploadedZIP = true;
+                    // Checks if both are uploaded
+                    if (uploadedZIP && uploadedTXT) {
+                      setDisabled(false);
+                    }
+                  
+                }}
+                pickerOptions={{
+                  onClose: () => {
+                    handleClosePicker();
+                  },
+                }}
+              />
+            </div>
+          )}
+          
+          <br />
+          <Button
+            name="Upload txt file"
+            onClick={() => {
+              console.log("Hello" + uploadedTXT);
+              setTXTPickerVisible(true);
+            }}
+          ></Button>
+          <br />
+          <Button
+            name="Upload Zip File"
+            onClick={() => {
+              setZIPPickerVisible(true);
+            }}
+          ></Button>
+          <br />
+          <InputTextArea label="Type your comments here..."></InputTextArea>
+          <br />
+          <Button 
+          name="Submit" 
+          disabled={disabled}
+          onClick={() => {
+            //This sets the new score
+            latestSubmissionScores[tabIndex - 1] = Mark;
+            //This is to set the other scores to 0, to handle it better in the sub hist
+            // for (let i = 0; i < latestSubmissionScores.length; i++){
+            //   if (i != tabIndex-1){
+            //     latestSubmissionScores[i] = 0;
+            //   }
+            // }
+            console.log(Mark)
+            console.log(latestSubmissionScores)
+            uploadSubmissions();
+            setTimeout(function () {
+              window.location.reload(false);
+            }, 1000);
+          }}
+          
+          ></Button>
+          <br />
+          <div style={{ marginLeft: 6, marginTop: 5 }}>
+            <Button
+              name="close"
+              onClick={() => {
+                setModalVisible(false);
+              }}
+            ></Button>
+          </div>
+        </div>
+      </Modal>
+      {showTXTAlert && (
+              <div
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                zIndex: 9999,
+              }}
+            >
+            <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert
+            severity="error"
+            onClose={() => {setShowTXTAlert(false)}}>Please submit a txt file</Alert>
+          </Stack>
+          </div>
+          )}
       <div data-role="Header" className="arena-main-navbar-container">
         <div className="arena-main-navbar">
           <div className="arena-main-left-side">
@@ -324,6 +570,8 @@ const ArenaMain = (props) => {
       <div className="arena-main-section-separator3"></div>
       <br />
       <h1>{title}</h1>
+      <h2>Submissions</h2>
+      <br />
       <p>{paragraph}</p>
       <br />
       <a
@@ -350,20 +598,24 @@ const ArenaMain = (props) => {
       <br />
       <h1>Submit your code here:</h1>
       <div className="arena-main-tabs">
-      <div>
-      {isLoaded && (
-        <BasicTabs
-          tabContent={latestSubmissionScores}
-          tabCount={numTests}
-          onSubmit={(index) => {
-            setPickerVisible(true);
-            tabIndex = index + 1;
-            console.log(tabIndex);
-          }}
-        />
-      )}
-    </div>
-        {pickerVisible && (
+        <div>
+          {isLoaded && (
+            <BasicTabs
+              tabContent={latestSubmissionScores}
+              tabContent2={highestSubArray}
+              tabCount={numTests}
+              labels={testcases.split(",")}
+              onSubmit={(index) => {
+                // setPickerVisible(true);
+                tabIndex = index + 1;
+                // console.log(tabIndex);
+                //Sets the modal to visible
+                setModalVisible(true);
+              }}
+            />
+          )}
+        </div>
+        {/* {pickerVisible && (
           <PickerOverlay
             key="picker-overlay"
             apikey={process.env.REACT_APP_API_KEY_FILESTACK}
@@ -385,7 +637,7 @@ const ArenaMain = (props) => {
               },
             }}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import Button from "../components/button";
 
 
 function TabPanel(props) {
-  const { children, value, index, onSubmit, ...other } = props;
+  const { children, value, index, onSubmit, labels, ...other } = props;
 
   const handleButtonClick = () => {
     onSubmit(index);
@@ -50,7 +50,7 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({ onSubmit, tabCount, tabContent }) { // Receive onSubmit, tabCount, and tabContent props
+export default function BasicTabs({ onSubmit, labels, tabCount, tabContent, tabContent2 }) { // Receive onSubmit, tabCount, and tabContent props
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -64,7 +64,7 @@ export default function BasicTabs({ onSubmit, tabCount, tabContent }) { // Recei
           {Array.from({ length: tabCount }, (_, index) => (
             <Tab
               key={index}
-              label={`Testcase ${index + 1}`}
+              label={`${labels[index]}`}
               {...a11yProps(index)}
             />
           ))}
@@ -78,7 +78,9 @@ export default function BasicTabs({ onSubmit, tabCount, tabContent }) { // Recei
           onSubmit={onSubmit}
         >
           {/* Render content for each tab from the tabContent prop */}
-          {"Score: " + tabContent[index]}
+          {" Latest Score: " + tabContent[index]}
+          <br/>
+          {"Highest Score: " + tabContent2[index]}
         </TabPanel>
       ))}
     </Box>
